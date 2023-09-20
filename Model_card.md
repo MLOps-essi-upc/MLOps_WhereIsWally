@@ -9,10 +9,7 @@
 
 # Model Card for 
 
-<!-- Provide a quick summary of what the model is/does. [Optional] -->
-Some cool model...
-
-
+The model performs multi-class object detection usign the algorithm YOLO v7. 
 
 
 #  Table of Contents
@@ -58,8 +55,10 @@ Some cool model...
 
 ## Model Description
 
-<!-- Provide a longer summary of what this model is/does. -->
-Some cool model...
+Our aim is to solve Where is Wally puzzles by finding the exact position of Wally and the other characters (Wenda, Odlaw, Wizard and Woof).  
+We are going to use a model pretrained on MS-COCO for object detection followed by transfer learning.
+
+YOLO (You Only Look Once) is a popular object detection model known for its speed and accuracy. It introduces an end-to-end neural network that simultaneously predicts bounding boxes and class probabilities. This contrasts with earlier object detection methods that adapted classifiers for detection tasks. Adopting this novel approach, YOLO surpassed the performance of other real-time object detection systems by a significant measure.
 
 - **Developed by:** More information needed
 - **Shared by [Optional]:** More information needed
