@@ -1,6 +1,6 @@
 # MLOps_WhereIsWally
 
-# Dataset Card for WhereIsWally
+# Dataset Card for WhereIsWally Object Detection 
 
 ## Dataset Description
 
@@ -12,21 +12,21 @@
 
 ### Dataset Summary
 
-This dataset card aims to be a base template for new datasets. It has been generated using [this raw template](https://github.com/huggingface/huggingface_hub/blob/main/src/huggingface_hub/templates/datasetcard_template.md?plain=1).
+The WhereIsWally dataset contains 3514 snapshots of different scenarios of the 17 existing Where Is Wally books. Each scenario contains one or more of the following characters: Odlaw, Wally, Wilma and Wizard. Annotations of where none, one or more of these characters can be found are added to each snapshot which facilitates building an objecr detection model.
 
 ### Supported Tasks and Leaderboards
 
-[More Information Needed]
+This dataset support building an object detection model to find the character(s). 
 
 ### Languages
 
-[More Information Needed]
+As it is a graphical dataset, language presence does not apply.
 
 ## Dataset Structure
 
 ### Data Instances
 
-[More Information Needed]
+A typical image is divided up in different snapshots. Each of the snapshots contains none, one or more annoted characters. 
 
 ### Data Fields
 
@@ -34,7 +34,9 @@ This dataset card aims to be a base template for new datasets. It has been gener
 
 ### Data Splits
 
-[More Information Needed]
+|    Train    | Validation |    Test    |
+| ----------- | ---------- | ---------- |
+| 2811 (80%)  | 351 (10%)  | 352 (10%)  |
 
 ## Dataset Creation
 
@@ -44,56 +46,45 @@ This dataset card aims to be a base template for new datasets. It has been gener
 
 ### Source Data
 
-#### Initial Data Collection and Normalization
+This dataset is a Roboflow project called "Wally v3 Computer Vision Project". You can find references below:
+Reference: Wally, “Wally v3 dataset.” https://universe.roboflow.com/wally/wally-v3 ,
+mar 2022. visited on 2023-09-20.
 
-[More Information Needed]
+```
+BibTex: @misc{ wally-v3_dataset,
+    title = { Wally v3 Dataset },
+    type = { Open Source Dataset },
+    author = { Wally },
+    howpublished = { \url{ https://universe.roboflow.com/wally/wally-v3 } },
+    url = { https://universe.roboflow.com/wally/wally-v3 },
+    journal = { Roboflow Universe },
+    publisher = { Roboflow },
+    year = { 2022 },
+    month = { mar },
+    note = { visited on 2023-09-20 },
+}
+```
 
-#### Who are the source language producers?
-
-[More Information Needed]
+link: https://universe.roboflow.com/wally/wally-v3
 
 ### Annotations
 
 #### Annotation process
 
-[More Information Needed]
+None, one or more annotations per snapshot
 
 #### Who are the annotators?
 
-[More Information Needed]
-
-### Personal and Sensitive Information
-
-[More Information Needed]
+Roboflow user: Wally (https://universe.roboflow.com/wally)
 
 ## Considerations for Using the Data
 
 ### Social Impact of Dataset
 
-[More Information Needed]
-
-### Discussion of Biases
-
-[More Information Needed]
-
-### Other Known Limitations
-
-[More Information Needed]
+Recreational Purposes
 
 ## Additional Information
 
 ### Dataset Curators
 
-[More Information Needed]
-
-### Licensing Information
-
-[More Information Needed]
-
-### Citation Information
-
-[More Information Needed]
-
-### Contributions
-
-[More Information Needed]
+Roboflow user: Wally (https://universe.roboflow.com/wally)
