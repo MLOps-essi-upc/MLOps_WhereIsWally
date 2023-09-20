@@ -60,10 +60,9 @@ We are going to use a model pretrained on MS-COCO for object detection followed 
 
 YOLO (You Only Look Once) is a popular object detection model known for its speed and accuracy. It introduces an end-to-end neural network that simultaneously predicts bounding boxes and class probabilities. This contrasts with earlier object detection methods that adapted classifiers for detection tasks. Adopting this novel approach, YOLO surpassed the performance of other real-time object detection systems by a significant measure.
 
-- **Developed by:** More information needed
-- **Shared by [Optional]:** More information needed
-- **Model type:** Language model
-- **Language(s) (NLP):** More information needed
+- **Developed by:** Fatima Zohra Chiriki, Ange Xu, Ximena Moure, Louis Van Langendonck, Sebastian Paglia
+- **Model type:** Image model
+- **Language(s):** English
 - **License:** More information needed
 - **Parent Model:** More information needed
 - **Resources for more information:** More information needed
@@ -72,8 +71,10 @@ YOLO (You Only Look Once) is a popular object detection model known for its spee
 
 # Uses
 
-<!-- Address questions around how the model is intended to be used, including the foreseeable users of the model and those affected by the model. -->
-
+The main use of this model is for entreteinment and educational purpuses:
+- Entreteinment: the primary application of this model would be in creating entreteining games that involves: finding wally and other hidden characters in complex scenes, verifing automatecally if the players has found or not the hidden characters or generating new puzzles.
+  
+- Education: this could be used in educational contexts to develop interactive learning materials for children for children. It can be adapted to teach kids various skills like visual perception, attention to deal and proble-solving in a fun and engagin way.
 ## Direct Use
 
 <!-- This section is for the model use without fine-tuning or plugging into a larger ecosystem/app. -->
