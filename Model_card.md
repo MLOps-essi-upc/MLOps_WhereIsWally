@@ -113,21 +113,21 @@ The users should be aware of the bias, risk, and technical limitations. Allow us
 
 
 # Training Details
-
+The dataset used for the model training is available [here](https://universe.roboflow.com/wally/wally-v3 that contains in total 3514 images). 
 ## Training Data
 
 <!-- This should link to a Data Card, perhaps with a short stub of information on what the training data is all about as well as documentation related to data pre-processing or additional filtering. -->
 
-More information on training data needed
+The Data Card of the model can be found [here](https://github.com/MLOps-essi-upc/MLOps_WhereIsWally/blob/main/Data_card.md).
 
 
 ## Training Procedure
 
 <!-- This relates heavily to the Technical Specifications. Content here should link to that section when it is relevant to the training procedure. -->
+The training process starts with a pretrained on MS COCO dataset YOLO V7 end-to-end multi-class object detection model, and then apply transfer learning by setting the pretrained weights on MS COCO dataset as initial weights for the input layers of Wally model. As the original model was trained on MS COCO dataset, and it has 80 classes, the layers should modified in order to tackle 4-classes classification problem instead of 80.
 
 ### Preprocessing
-
-More information needed
+The datasets contrains already annotated images with bounding boxes for the target objects. THe position of the bounding boxes is also provided. Thus, no preprocessing tasks is needed.
 
 ### Speeds, Sizes, Times
 
