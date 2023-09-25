@@ -113,7 +113,7 @@ The users should be aware of the bias, risk, and technical limitations. Allow us
 
 
 # Training Details
-The dataset used for the model training is available [here](https://universe.roboflow.com/wally/wally-v3 that contains in total 3514 images). 
+The dataset used for the model training is available [here](https://universe.roboflow.com/wally/wally-v3) that contains in total 3514 images. 
 ## Training Data
 
 <!-- This should link to a Data Card, perhaps with a short stub of information on what the training data is all about as well as documentation related to data pre-processing or additional filtering. -->
