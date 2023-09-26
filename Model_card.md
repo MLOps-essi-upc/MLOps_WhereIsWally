@@ -41,8 +41,6 @@ The model performs multi-class object detection usign the algorithm YOLO v7.
     - [Software](#software)
 - [Citation](#citation)
 - [Glossary [optional]](#glossary-optional)
-- [More Information [optional]](#more-information-optional)
-- [Model Card Authors [optional]](#model-card-authors-optional)
 - [Model Card Contact](#model-card-contact)
 - [How to Get Started with the Model](#how-to-get-started-with-the-model)
 
@@ -68,12 +66,14 @@ YOLO (You Only Look Once) is a popular object detection model known for its spee
 # Uses
 
 The model designed to solve "Where is Wally?" puzzles would be mainly used for the following purposes:
-- Entertaining: the model can be used to create entertaining applications to perform the following tasks: finding wally and other hidden characters in complex scenes, verifying automatically if the players has found or not the hidden characters and also for generating new puzzles.
+
+- Entertainment: the model can be used to create entertaining applications to perform the following tasks: finding wally and other hidden characters in complex scenes, verifying automatically if the players has found or not the hidden characters and also for generating new puzzles.
   
 - Education: in educational contexts the model can be used to develop interactive learning materials for children. It can be adapted to teach kids various skills like visual perception, attention to deal and proble-solving in a fun and engaging way.
 
 - Quality control: Publishers of puzzle books, magazines or newspapers could use the model as a quality control tool, as it can verify if the Wally appears in the scenes or not before their publication.
-- 
+  
+- Aid for Visual Impairment: The model could be adapted to assist visually impaired individuals in identifying objects or people in photographs or real-time settings.
 ## Direct Use
 - The model can be used for task of Multi-class Object Detection.
 
@@ -104,6 +104,11 @@ List of some out-of-scope uses:
 <!-- This section is meant to convey both technical and sociotechnical limitations. -->
 The model may not be able to locate the hidden characters. Like in all AI models, false positives and false negatives could occur with a lower probability.
 
+While the model is specialized for "Where's Wally?" puzzles, there's no guarantee it will perform well on similar object detection tasks without significant retraining or adaptation.
+
+The model's performance might decrease with low-resolution images or scans of puzzles. It's also susceptible to issues like glare, shadows, or other imperfections in the images.
+
+If the model were adapted for broader object or person detection, it might exhibit biases related to cultural representation, gender, age, etc., depending on the training data.
 
 ## Recommendations
 
@@ -113,7 +118,9 @@ The users should be aware of the bias, risk, and technical limitations. Allow us
 
 
 # Training Details
-The dataset used for the model training is available [here](https://universe.roboflow.com/wally/wally-v3) that contains in total 3514 images. 
+
+The dataset used for training the model is available [here](https://universe.roboflow.com/wally/wally-v3). It contains a total of 3514 images. 
+
 ## Training Data
 
 <!-- This should link to a Data Card, perhaps with a short stub of information on what the training data is all about as well as documentation related to data pre-processing or additional filtering. -->
@@ -216,15 +223,6 @@ More information needed
 
 More information needed
 
-# More Information [optional]
-
-More information needed
-
-# Model Card Authors [optional]
-
-<!-- This section provides another layer of transparency and accountability. Whose views is this model card representing? How many voices were included in its construction? Etc. -->
-
-More information needed
 
 # Model Card Contact
 
