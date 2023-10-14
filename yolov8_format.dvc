@@ -1,5 +1,5 @@
 outs:
-    - md5: df55074f276af7c61c1a9cb75e6e0921.dir
-      size: 290975519
+    - md5: c42b753b536945e503fdd6fa1fbfa36b.dir
+      size: 348166903
       path: yolov8_format
-      nfiles: 600
+      nfiles: 700
