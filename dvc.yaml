@@ -1,10 +1,10 @@
 stages:
   train:
-    cmd: python src/train.py
+    cmd: python src/models/train.py
     deps:
     - data/yolov8-format
-    - src/train.py
-    - params.yaml
+    - src/models/train.py
+    - src/models/params.yaml
     outs:
     - models/model.pt
     - reports/train_params.yaml:
