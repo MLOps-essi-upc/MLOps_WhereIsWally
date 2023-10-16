@@ -1,0 +1,14 @@
+stages:
+  train:
+    cmd: python src/train.py
+    deps:
+    - data/yolov8-format
+    - src/models/train.py
+    - src/models/params.yaml
+    outs:
+    - models/model.pt
+    - reports/train_params.yaml:
+        cache: false
+    metrics:
+    - reports/train_metrics.csv:
+        cache: false

@@ -4,4 +4,4 @@ seed: 0
 imgsz: 640 
 batch: 8 
 epochs: 30
-name: 'yolov8s_exploration' # experiment name
+name: 'yolov8s_local_run' # experiment name
