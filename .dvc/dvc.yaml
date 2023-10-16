@@ -1,6 +1,6 @@
 stages:
   train:
-    cmd: python src/train.py
+    cmd: python src/models/train.py
     deps:
     - data/yolov8-format
     - src/models/train.py
