@@ -1,7 +1,11 @@
 WhereIsWally
 ==============================
 
-AI model that deetcts Wally in pictures
+Object detection model to solve Where's Wally puzzles, a British series of children's puzzle books. The goal is to find one or more of the following characters: Odlaw, Wally, Wilma and Wizard. This project is part of a MLOps course (2023) at the Universitat Politecnica de Catalunya (UPC). 
+
+[Data Card](Data_card.md)
+
+[Model Card](Model_card.md)
 
 Project Organization
 ------------
