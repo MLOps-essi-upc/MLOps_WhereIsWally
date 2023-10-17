@@ -1,4 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+<<<<<<< HEAD
+  <component name="ProjectRootManager" version="2" project-jdk-name="mlops_env" project-jdk-type="Python SDK" />
+=======
   <component name="ProjectRootManager" version="2" project-jdk-name="Python 3.9 (MLOps_WhereIsWally)" project-jdk-type="Python SDK" />
+>>>>>>> e24dbc187296f8ed5e425cdab40b970af88cb8d9
 </project>
