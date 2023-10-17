@@ -1,0 +1,239 @@
+{
+  "data_asset_type": null,
+  "expectation_suite_name": "default",
+  "expectations": [
+    {
+      "expectation_type": "expect_column_values_to_not_be_null",
+      "kwargs": {
+        "column": "filename"
+      },
+      "meta": {}
+    },
+    {
+      "expectation_type": "expect_column_values_to_not_be_null",
+      "kwargs": {
+        "column": "width"
+      },
+      "meta": {}
+    },
+    {
+      "expectation_type": "expect_column_values_to_not_be_null",
+      "kwargs": {
+        "column": "height"
+      },
+      "meta": {}
+    },
+    {
+      "expectation_type": "expect_column_values_to_not_be_null",
+      "kwargs": {
+        "column": "class"
+      },
+      "meta": {}
+    },
+    {
+      "expectation_type": "expect_column_values_to_not_be_null",
+      "kwargs": {
+        "column": "xmin"
+      },
+      "meta": {}
+    },
+    {
+      "expectation_type": "expect_column_values_to_not_be_null",
+      "kwargs": {
+        "column": "ymin"
+      },
+      "meta": {}
+    },
+    {
+      "expectation_type": "expect_column_values_to_not_be_null",
+      "kwargs": {
+        "column": "xmax"
+      },
+      "meta": {}
+    },
+    {
+      "expectation_type": "expect_column_values_to_not_be_null",
+      "kwargs": {
+        "column": "ymax"
+      },
+      "meta": {}
+    },
+    {
+      "expectation_type": "expect_column_values_to_be_of_type",
+      "kwargs": {
+        "column": "filename",
+        "type_": "object"
+      },
+      "meta": {}
+    },
+    {
+      "expectation_type": "expect_column_values_to_be_of_type",
+      "kwargs": {
+        "column": "width",
+        "type_": "int"
+      },
+      "meta": {}
+    },
+    {
+      "expectation_type": "expect_column_values_to_be_of_type",
+      "kwargs": {
+        "column": "height",
+        "type_": "int"
+      },
+      "meta": {}
+    },
+    {
+      "expectation_type": "expect_column_values_to_be_of_type",
+      "kwargs": {
+        "column": "class",
+        "type_": "object"
+      },
+      "meta": {}
+    },
+    {
+      "expectation_type": "expect_column_values_to_be_of_type",
+      "kwargs": {
+        "column": "xmin",
+        "type_": "int"
+      },
+      "meta": {}
+    },
+    {
+      "expectation_type": "expect_column_values_to_be_of_type",
+      "kwargs": {
+        "column": "ymin",
+        "type_": "int"
+      },
+      "meta": {}
+    },
+    {
+      "expectation_type": "expect_column_values_to_be_of_type",
+      "kwargs": {
+        "column": "xmax",
+        "type_": "int"
+      },
+      "meta": {}
+    },
+    {
+      "expectation_type": "expect_column_values_to_be_of_type",
+      "kwargs": {
+        "column": "ymax",
+        "type_": "int"
+      },
+      "meta": {}
+    },
+    {
+      "expectation_type": "expect_column_values_to_be_between",
+      "kwargs": {
+        "column": "width",
+        "max_value": 1280,
+        "min_value": 0
+      },
+      "meta": {}
+    },
+    {
+      "expectation_type": "expect_column_values_to_be_between",
+      "kwargs": {
+        "column": "height",
+        "max_value": 1280,
+        "min_value": 0
+      },
+      "meta": {}
+    },
+    {
+      "expectation_type": "expect_column_values_to_be_between",
+      "kwargs": {
+        "column": "xmin",
+        "max_value": 1280,
+        "min_value": 0
+      },
+      "meta": {}
+    },
+    {
+      "expectation_type": "expect_column_values_to_be_between",
+      "kwargs": {
+        "column": "ymin",
+        "max_value": 1280,
+        "min_value": 0
+      },
+      "meta": {}
+    },
+    {
+      "expectation_type": "expect_column_values_to_be_between",
+      "kwargs": {
+        "column": "xmax",
+        "max_value": 1280,
+        "min_value": 0
+      },
+      "meta": {}
+    },
+    {
+      "expectation_type": "expect_column_values_to_be_between",
+      "kwargs": {
+        "column": "ymax",
+        "max_value": 1280,
+        "min_value": 0
+      },
+      "meta": {}
+    },
+    {
+      "expectation_type": "expect_column_distinct_values_to_be_in_set",
+      "kwargs": {
+        "column": "class",
+        "value_set": [
+          "Wally",
+          "Odlaw",
+          "Wizard",
+          "Wilma"
+        ]
+      },
+      "meta": {}
+    },
+    {
+      "expectation_type": "expect_column_distinct_values_to_be_in_set",
+      "kwargs": {
+        "column": "filename",
+        "value_set": [
+          "hollywood2_jpg.rf.9bc2637a86cdf33ac2e6e5d634170a61.jpg",
+          "hollywood2_jpg.rf.678c52a17f5d2bd87fb1fd40c92d6406.jpg",
+          "hollywood2_jpg.rf.a99ca715fddb7f12967db1b6261bdf77.jpg",
+          "hollywood2_jpg.rf.ebc6c151a48e03c71d6b1fe783b285ca.jpg",
+          "11_jpg.rf.c60bf7df01c944d23380bbf19a4d7934.jpg",
+          "The-Deep-See-Divers_jpg.rf.6baa7359d525ebe76854e1e27bf84ba7.jpg",
+          "The-Deep-See-Divers_jpg.rf.1a9b0707bc84809fcf41b22d6150daa1.jpg",
+          "6_jpg.rf.eb26b0d43765a36ae628ae6e0633f1d9.jpg",
+          "6_jpg.rf.70709ddbbb6ab1730a45a384b875d507.jpg",
+          "10_jpg.rf.c75cf67b0a999b619d589a18f1b717b0.jpg",
+          "One_jpg.rf.17c332badd990eda8836e927e6e7baca.jpg",
+          "Six_jpg.rf.f1fe6d7dc6164b4b33165c1d31ede3b8.jpg",
+          "Six_jpg.rf.0fab3e72eda2be0ace45145068f977f1.jpg",
+          "_annotations.csv",
+          "8_jpg.rf.06e762dd26fc010442365b92e263968b.jpg",
+          "One_jpg.rf.2c6584bed8fa21e2b214adba91d95698.jpg",
+          "6_jpg.rf.2b9a5789e369814510ac7b0ec13fdd7e.jpg",
+          "8_jpg.rf.2ba89ae99467c96168294f5102462bc8.jpg",
+          "8_jpg.rf.bfcc1b4bb8d1e0f408f47e17490ea94c.jpg",
+          "10_jpg.rf.3aac050b1f3b73a05de315522448d933.jpg",
+          "Six_jpg.rf.4af7955cf7ed2be69367b8ff319d79dc.jpg",
+          "One_jpg.rf.6d84488c404f92541ab32b0a1b55bbfe.jpg",
+          "11_jpg.rf.b9c2f71fd0da70c60ac877f252051f18.jpg",
+          "10_jpg.rf.0508439d6c780ee26beafabb6750d9b8.jpg",
+          "Six_jpg.rf.10475375221bd608463c0f6f51a80141.jpg",
+          "11_jpg.rf.f2fad5830c5775ebc757b5672e78f987.jpg",
+          "11_jpg.rf.eef5d6ec4d0535191c3a55bbf46712c1.jpg",
+          "8_jpg.rf.2701df94eefad377e4fd88787f38ec63.jpg",
+          "One_jpg.rf.336ad93c3cd7accc43aa04bd2ae45bbd.jpg",
+          "The-Deep-See-Divers_jpg.rf.abaa9ae35fcc9e09af152710469e52fa.jpg",
+          "6_jpg.rf.6412ce09fac136df68ed076abd7ee7d4.jpg",
+          "10_jpg.rf.cf2c519f4efddd607df3ded37b82666a.jpg",
+          "The-Deep-See-Divers_jpg.rf.e3395dfc43fb495550243bd369eaca54.jpg"
+        ]
+      },
+      "meta": {}
+    }
+  ],
+  "ge_cloud_id": null,
+  "meta": {
+    "great_expectations_version": "0.17.21"
+  }
+}
