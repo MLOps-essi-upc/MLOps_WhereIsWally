@@ -7,7 +7,7 @@
 The WhereIsWally dataset contains snapshots of different scenarios of the 17 existing *Where's Wally* books, a British series of children's puzzle books created by English illustrator Martin Handford. Each scenario contains one or more of the following characters: Odlaw, Wally, Wilma and Wizard. Per snapshot, zero, one or more of these characters can be found with corresponding annotations. This naturally facilitates building an object detection model to detect these characters for an unseen *Where's Wally*-scenario. 
 
 fe. A snapshot containing two characters ('Odlaw' and 'Wilma'):
-![alt text](https://github.com/MLOps-essi-upc/MLOps_WhereIsWally/blob/main/example-image.png "Example Detection Image")
+![alt text](./figures/example-image.png "Example Detection Image")
 
 ### Supported Tasks and Leaderboards
 

@@ -181,10 +181,10 @@
       "kwargs": {
         "column": "class",
         "value_set": [
+          "Wilma",
           "Wally",
           "Odlaw",
-          "Wizard",
-          "Wilma"
+          "Wizard"
         ]
       },
       "meta": {}
