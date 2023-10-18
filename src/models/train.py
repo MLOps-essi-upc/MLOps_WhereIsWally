@@ -10,14 +10,16 @@ import pandas as pd
 from pathlib import Path
 
 
-os.environ['MLFLOW_TRACKING_USERNAME'] = input('Enter your DAGsHub username: ')
-os.environ['MLFLOW_TRACKING_PASSWORD'] = getpass('Enter your DAGsHub access token: ')
+# os.environ['MLFLOW_TRACKING_USERNAME'] = input('Enter your DAGsHub username: ')
+os.environ['MLFLOW_TRACKING_USERNAME'] = LouisVanLangendonck
+# os.environ['MLFLOW_TRACKING_PASSWORD'] = input('Enter your DAGsHub access token: ')
+os.environ['MLFLOW_TRACKING_PASSWORD'] = input('Enter your DAGsHub access token: ')
 os.environ['MLFLOW_TRACKING_URI'] = input('Enter your DAGsHub project tracking URI: ')
 
 mlflow.set_tracking_uri(os.environ['MLFLOW_TRACKING_URI'])
 
-emissions_output_folder = '../../metrics'
-models_output_folder = '../../models'
+emissions_output_folder = '..\..\metrics'
+models_output_folder = '..\..\models'
 
 with open(r"params.yaml", encoding='utf-8') as f:
     params = yaml.safe_load(f)
@@ -27,14 +29,14 @@ model = YOLO(params['model_type'])
 
 # Training.
 mlflow.set_experiment(params['name'])
-with mlflow.start_run(run_name=params['name']):
+with mlflow.start_run():
     with EmissionsTracker(
         output_dir=emissions_output_folder,
         output_file="emissions.csv",
         on_csv_write="update",
     ):
         results = model.train(
-            data='../../data/yolov8_format/data.yaml',
+            data="../../data/raw/yolov8_format/data.yaml",
             imgsz=params['imgsz'],
             epochs=params['epochs'],
             batch=params['batch'],
