@@ -1,8 +1,7 @@
 import json
 import pickle
-from pathlib import Path
-from pathlib import Path
 
+from pathlib import Path
 
 import mlflow
 import pandas as pd

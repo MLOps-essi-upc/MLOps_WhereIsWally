@@ -33,8 +33,9 @@ def test_model_expected_value(yov8_model, get_validation_data):
     metric = MeanAveragePrecision(iou_type="bbox",box_format='xywh')
     metric.update(preds, target)
     
-    # Compute the mean average recall for 10 detections per image(mar_10) and  global mean average precision(map) values for the model
+    # Compute the map(global mean average precision) and mar_10(mean average recall for 10 detections per image)
+    # values for the model
     assert metric.compute()['map'] == pytest.approx(0.6, rel=0.1)
     assert metric.compute()['mar_10'] == pytest.approx(0.6, rel=0.1)
     
-    
+  
