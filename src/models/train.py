@@ -1,5 +1,5 @@
 """Module that trains the model """
-import os
+import os, glob
 import pickle
 from getpass import getpass
 from pathlib import Path
@@ -8,18 +8,18 @@ from ultralytics import YOLO
 import yaml
 from codecarbon import EmissionsTracker
 import pandas as pd
-from src import METRICS_DIR, MODELS_DIR, PROCESSED_DATA_DIR, RAW_DATA_DIR
+from src import METRICS_DIR,MODELS_DIR,ROOT_DIR,DATA_YAML_DIR,ARTIFACTS_DIR,REPORTS_DIR
+import shutil
 
 os.environ['MLFLOW_TRACKING_USERNAME'] = input('Enter your DAGsHub username: ')
 os.environ['MLFLOW_TRACKING_PASSWORD'] = input('Enter your DAGsHub access token: ')
-os.environ['MLFLOW_TRACKING_URI'] = input('Enter your DAGsHub project tracking URI: ')
+os.environ['MLFLOW_TRACKING_URI'] = "https://dagshub.com/Sebastianpaglia/MLOps_WhereIsWally.mlflow"
+
 mlflow.set_tracking_uri(os.environ['MLFLOW_TRACKING_URI'])
 
-DATA_DIR = RAW_DATA_DIR
 EMISSIONS_OUTPUT_FOLDER = METRICS_DIR
-MODELS_OUTPUT_FOLDER = MODELS_DIR
 
-with open(r"params.yaml", encoding='utf-8') as f:
+with open(ROOT_DIR / "params.yaml", encoding='utf-8') as f:
     params = yaml.safe_load(f)
 
 # Load the model.
@@ -34,11 +34,12 @@ with mlflow.start_run():
             on_csv_write="update",
     ):
         results = model.train(
-            data=EMISSIONS_OUTPUT_FOLDER + "/data.yaml",
+            data=DATA_YAML_DIR,
             imgsz=params['imgsz'],
             epochs=params['epochs'],
             batch=params['batch'],
-            name=params['name'])
+            name=params['name']
+            ),
 
     # Log the CO2 emissions to MLflow
     emissions = pd.read_csv(EMISSIONS_OUTPUT_FOLDER + "/emissions.csv")
@@ -46,9 +47,18 @@ with mlflow.start_run():
     emissions_params = emissions.iloc[-1, 13:].to_dict()
     mlflow.log_params(emissions_params)
     mlflow.log_metrics(emissions_metrics)
-
+    
     # Save the model as a pickle file
     Path("models").mkdir(exist_ok=True)
+    
+    last_run_path=max(glob.glob(os.path.join(ARTIFACTS_DIR, '*/')), key=os.path.getmtime)
+    best_weight_path = ARTIFACTS_DIR / last_run_path / "weights/best.pt"
+    train_params_file= ARTIFACTS_DIR / last_run_path / "args.yaml"
+    train_metrics_file= ARTIFACTS_DIR / last_run_path / "results.csv"
+    shutil.copy(best_weight_path, MODELS_DIR / "model.pt")
+    shutil.copy(train_params_file, REPORTS_DIR / "train_params.yaml")
+    shutil.copy(train_params_file, REPORTS_DIR / "train_metrics.csv")
+    
+    # with open(MODELS_DIR / "yolov8_model.pkl", "wb") as pickle_file:
+    #     pickle.dump(results, pickle_file)
 
-    with open(MODELS_OUTPUT_FOLDER + "/yolov8_model.pkl", "wb") as pickle_file:
-        pickle.dump(results, pickle_file)

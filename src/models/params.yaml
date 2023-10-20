@@ -1,7 +1,0 @@
-model_type: yolov8n.pt 
-pretrained: True
-seed: 0
-imgsz: 200
-batch: 8 
-epochs: 1
-name: 'yolov8s_local_run' # experiment name
