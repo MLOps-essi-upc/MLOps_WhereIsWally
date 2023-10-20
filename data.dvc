@@ -1,5 +1,5 @@
 outs:
     - md5: b61170ca4037816bfbfa03ed2b6381fa.dir
       size: 1954792904
-      path: data
+      path: data/raw
       nfiles: 8023
