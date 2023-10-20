@@ -15,6 +15,7 @@ stages:
     cmd: python -m src.models.train
     deps:
     - data/processed/train/images
+    - data/processed/train/labels
     - src/models/train.py
     - params.yaml
     outs:
@@ -28,7 +29,7 @@ stages:
   evaluate:
     cmd: python -m src.models.evaluate
     deps:
-    - data/processed/test
+    - data/processed/valid
     - models/yolov8_model.pkl
     metrics:
     - metrics/scores.json:
