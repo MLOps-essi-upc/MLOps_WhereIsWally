@@ -7,6 +7,8 @@ Object detection model to solve Where's Wally puzzles, a British series of child
 
 [Model Card](Model_card.md)
 
+Estimated Total Emission: 0.19516348516162427 kg eq. Co2 (last update: 20/10/2023)
+
 Project Organization
 ------------
 
