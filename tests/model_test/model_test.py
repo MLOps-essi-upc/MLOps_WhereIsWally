@@ -5,6 +5,7 @@ from src.models.evaluate import load_validation_data
 from torch import tensor
 from torchmetrics.detection import MeanAveragePrecision
 import torch
+from map_boxes import mean_average_precision_for_boxes
 
 @pytest.fixture
 def yov8_model():
@@ -20,12 +21,24 @@ def test_model_expected_value(yov8_model, get_validation_data):
     x, y = get_validation_data
 
     val_predictions = yov8_model.predict(x,imgsz=640, conf=0.0033)
-    boxes=[]
-    for prediction in val_predictions:
-        boxes.append(prediction.boxes.xywh)  # Boxes object for bbox outputs
-        masks = prediction.masks  # Masks object for segmentation masks outputs
-        probs = prediction.probs  # Class probabilities for classification outputs
-    
+    predictions_lst=[]
+    labels_lst=[]
+   
+    # for img,prediction in zip(x,val_predictions):
+    #     img_name=img.split("/")[0]
+    #     masks = prediction.masks  # Masks object for segmentation masks outputs
+    #     probs = prediction.probs  # Class probabilities for classification outputs
+    #     if probs:
+    #         label=int(max(probs))
+    #     else:
+    #         label=1
+    #     print(y)
+    #     predictions_lst.append([img_name,label]+[v for v in prediction.boxes.xywh])
+    #     print(y[img])
+    #     labels_lst.append([img_name],int(y[img][0]),0.1,y[img][1],y[img][2],y[img][3],y[img][4])
+   
+    # mean_ap, average_precisions = mean_average_precision_for_boxes(labels_lst, predictions_lst)
+  
     # preds = [dict(boxes=torch.FloatTensor(next(iter(y.values()))[0]),scores=tensor([0.536]),labels=tensor([[1],[2],[2]]),)]
     # target = [dict(boxes=boxes.xywh,scores=tensor([0.536]),labels=tensor([[1],[1],[1]]),)]
     preds = [dict(boxes=tensor([[258.0, 41.0, 606.0, 285.0]]),scores=tensor([0.536]),labels=tensor([0]),)]

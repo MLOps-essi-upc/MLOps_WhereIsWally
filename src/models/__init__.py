@@ -1,1 +1,3 @@
-"""Module init_py"""
+from dotenv import load_dotenv
+
+load_dotenv()
