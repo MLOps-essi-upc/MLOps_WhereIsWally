@@ -1,10 +1,22 @@
 stages:
-  train:
-    cmd: python src/models/train.py
+  prepare:
+    cmd: python -m src.features.process_data
     deps:
-    - data/yolov8-format
+    - data/raw/train/images
+    - data/raw/valid/images
+    - data/raw/test/images
+    
+    outs:
+    - data/processed/train
+    - data/processed/valid
+    - data/processed/test
+
+  train:
+    cmd: python -m src.models.train
+    deps:
+    - data/processed/train/images
     - src/models/train.py
-    - src/models/params.yaml
+    - params.yaml
     outs:
     - models/model.pt
     - reports/train_params.yaml:
@@ -12,3 +24,4 @@ stages:
     metrics:
     - reports/train_metrics.csv:
         cache: false
+      
