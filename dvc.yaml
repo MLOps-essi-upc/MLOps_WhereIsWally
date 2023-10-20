@@ -28,7 +28,6 @@ stages:
   evaluate:
     cmd: python -m src.models.evaluate
     deps:
-    - data/processed/train
     - data/processed/test
     - models/yolov8_model.pkl
     metrics:
