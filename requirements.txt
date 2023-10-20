@@ -192,3 +192,4 @@ websocket-client==1.6.4
 Werkzeug==3.0.0
 widgetsnbextension==4.0.9
 zipp==3.17.0
+map-boxes==1.0.5
