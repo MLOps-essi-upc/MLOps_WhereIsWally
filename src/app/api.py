@@ -11,7 +11,6 @@ import numpy as np
 import cv2
 from src import MODELS_DIR,API_DIR
 from ultralytics import YOLO
-from fastapi.templating import Jinja2Templates
 import os
 model_wrappers_list: List[dict] = []
 
@@ -22,7 +21,6 @@ app = FastAPI(
     version="0.1",
 )
 
-templates = Jinja2Templates(directory='templates')
 
 def construct_response(f):
     """Construct a JSON response for an endpoint's results."""
@@ -84,7 +82,6 @@ def _index(request: Request):
     }
     return response
     
-    # return templates.TemplateResponse('index.html', {'request': request})
 
 @app.get("/models", tags=["Prediction"])
 @construct_response
