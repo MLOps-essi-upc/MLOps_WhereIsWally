@@ -66,11 +66,6 @@
     </style>
 </head>
 <body>
-    <div id="navbar">
-        <a href="#">Model 1</a>
-        <a href="#">Model 2</a>
-        <a href="#">Model 3</a>
-    </div>
 
     <div id="upload-container">
     <form id="upload-form" method="post" enctype="multipart/form-data">
@@ -112,27 +107,66 @@
 
         document.getElementById('upload-form').addEventListener('submit', function (e) {
             e.preventDefault();
-    
+
             var formData = new FormData(this);
-    
+
             fetch('upload_image', {
                 method: 'POST',
                 body: formData,
             })
             .then(response => response.json())
             .then(data => {
-                console.log(data);
-                if (data.status === 'success') {
-                    console.log('Image uploaded successfully');
-                } else {
-                    console.error('Error uploading image');
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
+                        // Assuming 'encoded_img' is the key in the API response
+                        const encodedImg = data.encoded_img;
+
+                        /// Get the existing image element
+                        const imagePreview = document.getElementById('uploaded-image');
+
+                        // Set the source of the existing image to the new base64 string
+                        imagePreview.src = `data:image/png;base64, ${encodedImg}`;
             });
-        });
+
+            // .then((data)=> {
+            //     console.log(data.encoded_img)
+            // })
+                // .then(data => {
+                //     // Handle the JSON data here
+                //     console.log(data);
+                //     if (data.status === 'success') {
+                //         // Process successful response
+                //         console.log('Image uploaded successfully');
+                //         // Additional logic to handle the response
+                //     } else {
+                //         // Handle error response
+                //         console.error('Error uploading image. Server response:', data);
+                //     }
+                // })
+        })
+
+        // document.getElementById('upload-form').addEventListener('submit', function (e) {
+        //     e.preventDefault();
+    
+        //     var formData = new FormData(this);
+    
+        //     fetch('upload_image', {
+        //         method: 'POST',
+        //         body: formData,
+        //     })
+        //     .then(response => response.json())
+        //     .then(data => {
+        //         console.log(data);
+        //         if (data.status === 'success') {
+        //             console.log('Image uploaded successfully');
+        //         } else {
+        //             console.error('Error uploading image');
+        //         }
+        //     })
+        //     .catch(error => {
+        //         console.error('Error:', error);
+        //     });
+        // });
     
     </script>
 </body>
 </html>
+
