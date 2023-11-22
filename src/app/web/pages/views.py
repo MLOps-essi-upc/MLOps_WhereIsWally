@@ -6,25 +6,26 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import render
 import base64
+import cv2
 # Create your views here.
 # pages/views.py
 
 @csrf_exempt
 def upload_image(request):
     if request.method == 'POST' and request.FILES.get('image'):
-        image = request.FILES['image']
-        encoded_image = base64.b64encode(image.read()).decode('utf-8')
+        image = request.FILES['image'].read()
 
         # API call
         # TODO: not working the endpoint call 
-        params={'file':encoded_image}
-        response = requests.post(api.PREDICT,params=params)
+        data = {
+            'file': image
+        }
+        response = requests.post(api.PREDICT,files=data)
         
-        #convert reponse data into json
+        # #convert reponse data into json
         response = response.json()
-        print("API response:",response)
-        
-        return JsonResponse({'status': 'success'})
+
+        return JsonResponse(response)
 
     return JsonResponse({'status': 'error'})
 

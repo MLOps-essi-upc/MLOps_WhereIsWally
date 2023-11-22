@@ -9,7 +9,7 @@ from fastapi import FastAPI, HTTPException, Request, File, UploadFile,Response
 from ultralytics.utils.plotting import Annotator
 import numpy as np
 import cv2
-from src import MODELS_DIR,API_DIR
+from src import MODELS_DIR, API_DIR
 from ultralytics import YOLO
 import os
 model_wrappers_list: List[dict] = []
@@ -117,7 +117,8 @@ async def _predict(type: str,file: UploadFile = File(...)):
 
     if model_wrapper:
         model=model_wrapper['model']
-        contents = await file.read()
+        contents = file.file.read()
+        # contents = await file.read()
         nparr = np.fromstring(contents, np.uint8)
         img = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
         results = model.predict(source=img, conf=0.25)
