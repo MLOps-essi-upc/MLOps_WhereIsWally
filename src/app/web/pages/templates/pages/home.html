@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Image Upload</title>
+    <title>WhereIsWally.ai</title>
     <style>
         body {
             background-color: #fff;
@@ -11,29 +12,46 @@
             font-family: 'Helvetica', sans-serif;
         }
 
-        #navbar {
-            background-color: #333;
-            overflow: hidden;
+        #header {
+            background-color: #fff;
+            color: #000;
+            padding-left: 10px;
+            padding-top: 10px;
+            text-align: left;
+            margin-left: 10px;
+            font-size: 20px;
         }
 
-        #navbar a {
-            float: left;
+        #options-container {
+            max-width: 25%;
+            margin-left: 10px;
+        }
+
+        #options {
+            background-color: #fff;
+            padding: 10px;
+            text-align: left;
+            font-size: 24px;
+            margin-top: 5px;
+        }
+
+        .option {
             display: block;
-            color: #f2f2f2;
-            text-align: center;
-            padding: 14px 16px;
-            text-decoration: none;
-            font-size: 17px;
+            cursor: pointer;
+            transition: font-weight 0.3s; /* Added transition for font-weight change on hover */
         }
 
-        #navbar a:hover {
-            background-color: #ddd;
-            color: black;
+        .option:hover {
+            font-weight: bold; /* Bold text on hover */
         }
 
         #upload-container {
-            text-align: center;
-            margin-top: 50px;
+        text-align: center;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        display: none;
         }
 
         #upload-button {
@@ -43,11 +61,12 @@
             padding: 10px 20px;
             font-size: 16px;
             cursor: pointer;
-            transition: background-color 0.3s;
+            transition: background-color 0.3s, font-weight 0.3s; /* Added transition for background and font-weight on hover */
         }
 
         #upload-button:hover {
             background-color: #eee;
+            font-weight: bold; /* Bold text on hover */
         }
 
         #image-input {
@@ -57,33 +76,353 @@
         #image-preview-container {
             display: none;
             margin-top: 20px;
+            text-align: center;
         }
 
         #uploaded-image {
             max-width: 100%;
             max-height: 400px;
         }
+
+        #detect-button {
+            background-color: #000;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 20px;
+            display: none;
+        }
+
+        /* Center the content in the remaining 2/3rd of the screen */
+        #content-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            width: calc(100% - 25% - 10px); /* Adjusted width for the remaining 2/3rd */
+            margin-left: 10px;
+        }
     </style>
 </head>
+
 <body>
 
-    <div id="upload-container">
-    <form id="upload-form" method="post" enctype="multipart/form-data">
-        {% csrf_token %}
-        <h1>Upload an Image</h1>
-        <label for="image-input" id="upload-button">Choose Image</label>
-        <input type="file" name="image" id="image-input" accept="image/*">
-        <div id="image-preview-container">
-            <img id="uploaded-image" alt="Uploaded Image">
+    <div id="header">
+        <h1>WhereIsWally.ai</h1>
+    </div>
+
+    <div id="options-container">
+        <div id="options">
+            <div class="option" id="upload-option">Upload Image</div>
+            <div class="option" id="select-option">Select Image</div>
+            <div class="option" id="model-option">Choose Model</div>
         </div>
-        <button type="submit">Upload</button>
-    </form>
+    </div>
+
+    <div id="content-container">
+        <div id="upload-container">
+            <form id="upload-form" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <label for="image-input" id="upload-button">Choose Image</label>
+                <input type="file" name="image" id="image-input" accept="image/*">
+                <div id="image-preview-container">
+                    <img id="uploaded-image" alt="Uploaded Image">
+                </div>
+                <button type="button" id="detect-button" onclick="detectWally()">Where is Wally?</button>
+            </form>
+        </div>
     </div>
 
     <script>
+        const uploadOption = document.getElementById('upload-option');
+        const selectOption = document.getElementById('select-option');
+        const modelOption = document.getElementById('model-option');
+        const uploadContainer = document.getElementById('upload-container');
+        const detectButton = document.getElementById('detect-button');
+        const optionsContainer = document.getElementById('options-container');
+        const imagePreviewContainer = document.getElementById('image-preview-container');
+    
+        const options = [uploadOption, selectOption, modelOption];
+    
+        options.forEach(option => {
+            option.addEventListener('click', function () {
+                toggleOption(option);
+            });
+        });
+    
+        function toggleOption(selectedOption) {
+            options.forEach(option => {
+                if (option === selectedOption) {
+                    option.style.fontWeight = option.style.fontWeight === 'bold' ? 'normal' : 'bold';
+                } else {
+                    option.style.fontWeight = 'normal';
+                }
+            });
+        }
+    
+        uploadOption.addEventListener('click', function () {
+            toggleUploadContainer();
+        });
+    
+        function toggleUploadContainer() {
+            if (uploadContainer.style.display === 'block') {
+                hideUploadContainer();
+            } else {
+                showUploadContainer();
+            }
+        }
+    
+        function showUploadContainer() {
+            uploadContainer.style.display = 'block';
+            detectButton.style.display = 'block';
+            imagePreviewContainer.style.display = 'none';
+        }
+    
+        function hideUploadContainer() {
+            uploadContainer.style.display = 'none';
+            detectButton.style.display = 'none';
+        }
+    
         document.getElementById('image-input').addEventListener('change', function (event) {
             const input = event.target;
-            const imagePreviewContainer = document.getElementById('image-preview-container');
+            const imagePreview = document.getElementById('uploaded-image');
+    
+            const file = input.files[0];
+            if (file) {
+                const reader = new FileReader();
+    
+                reader.onload = function (e) {
+                    imagePreview.src = e.target.result;
+                };
+    
+                reader.readAsDataURL(file);
+    
+                imagePreviewContainer.style.display = 'block';
+            } else {
+                imagePreview.src = '';
+                imagePreviewContainer.style.display = 'none';
+            }
+        });
+    
+        function detectWally() {
+            var formData = new FormData(document.getElementById('upload-form'));
+    
+            fetch('upload_image', {
+                    method: 'POST',
+                    body: formData,
+                })
+                .then(response => response.json())
+                .then(data => {
+                    const encodedImg = data.encoded_img;
+                    const imagePreview = document.getElementById('uploaded-image');
+    
+                    imagePreview.src = `data:image/png;base64, ${encodedImg}`;
+                    imagePreviewContainer.style.display = 'block';
+                });
+        }
+    
+        document.getElementById('upload-form').addEventListener('submit', function (e) {
+            e.preventDefault();
+            document.getElementById('image-input').value = '';
+            document.getElementById('uploaded-image').src = '';
+            imagePreviewContainer.style.display = 'none';
+            detectButton.style.display = 'none';
+            hideUploadContainer();
+        });
+    </script>
+    
+    
+</body>
+
+</html>
+
+
+<!-- <!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WhereIsWally.ai</title>
+    <style>
+        body {
+            background-color: #fff;
+            margin: 0;
+            font-family: 'Helvetica', sans-serif;
+        }
+
+        #header {
+            background-color: #fff;
+            color: #000;
+            padding: 10px;
+            text-align: left;
+            margin-left: 10px;
+            font-size: 20px;
+        }
+
+        #options-container {
+            max-width: 25%;
+            margin-left: 10px;
+        }
+
+        #options {
+            background-color: #fff;
+            padding: 10px;
+            text-align: left;
+            font-size: 14px;
+            margin-top: 5px;
+            border-top: 1px solid #000;
+        }
+
+        .option {
+            display: block;
+            margin-bottom: 10px;
+            cursor: pointer;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #000;
+            transition: font-weight 0.3s; /* Added transition for font-weight change on hover */
+        }
+
+        .option:hover {
+            font-weight: bold; /* Bold text on hover */
+        }
+
+        #upload-container {
+            text-align: center;
+            margin-top: 50px;
+            display: none;
+        }
+
+        #upload-button {
+            background-color: #fff;
+            color: #333;
+            border: 2px solid #ddd;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s, font-weight 0.3s; /* Added transition for background and font-weight on hover */
+        }
+
+        #upload-button:hover {
+            background-color: #eee;
+            font-weight: bold; /* Bold text on hover */
+        }
+
+        #image-input {
+            display: none;
+        }
+
+        #image-preview-container {
+            display: none;
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        #uploaded-image {
+            max-width: 100%;
+            max-height: 400px;
+        }
+
+        #detect-button {
+            background-color: #000;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 20px;
+            display: none;
+        }
+
+        /* Center the content in the remaining 2/3rd of the screen */
+        #content-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            width: calc(100% - 25% - 10px); /* 25% for options + 10px left margin */
+            margin-left: 10px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="header">
+        <h1>WhereIsWally.ai</h1>
+    </div>
+
+    <div id="options-container">
+        <div id="options">
+            <div class="option" id="upload-option">Upload Image</div>
+            <div class="option" id="select-option">Select Image</div>
+            <div class="option" id="model-option">Choose Model</div>
+        </div>
+    </div>
+
+    <div id="content-container">
+        <div id="upload-container">
+            <form id="upload-form" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <label for="image-input" id="upload-button">Choose Image</label>
+                <input type="file" name="image" id="image-input" accept="image/*">
+                <div id="image-preview-container">
+                    <img id="uploaded-image" alt="Uploaded Image">
+                </div>
+                <button type="button" id="detect-button" onclick="detectWally()">Where is Wally?</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        const uploadOption = document.getElementById('upload-option');
+        const selectOption = document.getElementById('select-option');
+        const modelOption = document.getElementById('model-option');
+        const uploadContainer = document.getElementById('upload-container');
+        const detectButton = document.getElementById('detect-button');
+        const optionsContainer = document.getElementById('options-container');
+        const imagePreviewContainer = document.getElementById('image-preview-container');
+
+        uploadOption.addEventListener('click', function () {
+            toggleUploadContainer();
+        });
+
+        function toggleUploadContainer() {
+            if (uploadContainer.style.display === 'block') {
+                hideUploadContainer();
+            } else {
+                showUploadContainer();
+            }
+        }
+
+        function showUploadContainer() {
+            uploadContainer.style.display = 'block';
+            detectButton.style.display = 'block';
+            detectButton.style.marginTop = '20px';
+            hideOtherOptions();
+            imagePreviewContainer.style.display = 'none'; // Hide the 'Uploaded Image' sign
+        }
+
+        function hideUploadContainer() {
+            uploadContainer.style.display = 'none';
+            detectButton.style.display = 'none';
+            showOtherOptions();
+        }
+
+        function hideOtherOptions() {
+            selectOption.style.display = 'none';
+            modelOption.style.display = 'none';
+        }
+
+        function showOtherOptions() {
+            selectOption.style.display = 'block';
+            modelOption.style.display = 'block';
+        }
+
+        document.getElementById('image-input').addEventListener('change', function (event) {
+            const input = event.target;
             const imagePreview = document.getElementById('uploaded-image');
 
             const file = input.files[0];
@@ -105,68 +444,39 @@
             }
         });
 
-        document.getElementById('upload-form').addEventListener('submit', function (e) {
-            e.preventDefault();
-
-            var formData = new FormData(this);
+        function detectWally() {
+            var formData = new FormData(document.getElementById('upload-form'));
 
             fetch('upload_image', {
-                method: 'POST',
-                body: formData,
-            })
-            .then(response => response.json())
-            .then(data => {
-                        // Assuming 'encoded_img' is the key in the API response
-                        const encodedImg = data.encoded_img;
+                    method: 'POST',
+                    body: formData,
+                })
+                .then(response => response.json())
+                .then(data => {
+                    // Assuming 'encoded_img' is the key in the API response
+                    const encodedImg = data.encoded_img;
 
-                        /// Get the existing image element
-                        const imagePreview = document.getElementById('uploaded-image');
+                    // Get the existing image element
+                    const imagePreview = document.getElementById('uploaded-image');
 
-                        // Set the source of the existing image to the new base64 string
-                        imagePreview.src = `data:image/png;base64, ${encodedImg}`;
-            });
+                    // Set the source of the existing image to the new base64 string
+                    imagePreview.src = `data:image/png;base64, ${encodedImg}`;
+                    imagePreviewContainer.style.display = 'block'; // Show the image preview container
+                });
+        }
 
-            // .then((data)=> {
-            //     console.log(data.encoded_img)
-            // })
-                // .then(data => {
-                //     // Handle the JSON data here
-                //     console.log(data);
-                //     if (data.status === 'success') {
-                //         // Process successful response
-                //         console.log('Image uploaded successfully');
-                //         // Additional logic to handle the response
-                //     } else {
-                //         // Handle error response
-                //         console.error('Error uploading image. Server response:', data);
-                //     }
-                // })
-        })
-
-        // document.getElementById('upload-form').addEventListener('submit', function (e) {
-        //     e.preventDefault();
-    
-        //     var formData = new FormData(this);
-    
-        //     fetch('upload_image', {
-        //         method: 'POST',
-        //         body: formData,
-        //     })
-        //     .then(response => response.json())
-        //     .then(data => {
-        //         console.log(data);
-        //         if (data.status === 'success') {
-        //             console.log('Image uploaded successfully');
-        //         } else {
-        //             console.error('Error uploading image');
-        //         }
-        //     })
-        //     .catch(error => {
-        //         console.error('Error:', error);
-        //     });
-        // });
-    
+        // Add an event listener to undo the image upload and hide the options
+        document.getElementById('upload-form').addEventListener('submit', function (e) {
+            e.preventDefault();
+            document.getElementById('image-input').value = ''; // Clear the file input
+            document.getElementById('uploaded-image').src = ''; // Clear the image preview
+            imagePreviewContainer.style.display = 'none'; // Hide the image preview container
+            showOtherOptions();
+            optionsContainer.style.display = 'block'; // Show options again
+            detectButton.style.display = 'none'; // Hide the "Where is Wally?" button
+            hideUploadContainer();
+        });
     </script>
 </body>
-</html>
 
+</html> -->
