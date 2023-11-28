@@ -1,0 +1,8 @@
+FROM python:3.9-slim
+WORKDIR /app
+COPY src/ ./src/
+COPY models/ ./models/
+RUN pip install --upgrade pip
+RUN pip install --no-cache-dir -r src/app/backend/requirements_api.txt
+EXPOSE 5000
+ENTRYPOINT [ "uvicorn", "app:app", "--host", "0.0.0.0", "--reload", "--reload-dir", "src/app","--reload-dir", "models"]
