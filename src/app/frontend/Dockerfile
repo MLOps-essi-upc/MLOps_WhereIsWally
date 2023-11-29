@@ -2,7 +2,7 @@ FROM python:3.9-slim
 
 WORKDIR /web
 
-COPY ./web/ .
+COPY ./web .
 
 RUN pip install --upgrade pip
 RUN pip install Django
