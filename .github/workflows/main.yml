@@ -1,0 +1,29 @@
+name: Publish Docker image
+
+on:
+ push:
+ branches:
+ - API_develop
+
+jobs:
+  push_to_registry:
+    name: Push Docker image to Docker Hub
+    runs-on: ubuntu-latest
+    steps:
+       - uses: actions/checkout@v1
+       
+       - name: Docker login
+       run: docker login -u ${{ secrets.DOCKER_USER }} -p ${{ secrets.DOCKER_PASSWORD }}
+       
+       - name: Build APP IMAGE
+       run: docker build -t app -f /src/app/backend/dockerfile_api .
+       
+       - name: Tags
+       run: |
+       docker tag app ${{ secrets.DOCKER_USER }}/app:${{ github.sha }}
+       docker tag app ${{ secrets.DOCKER_USER }}/app:latest
+       
+       - name: Push
+       run: |
+       docker push ${{ secrets.DOCKER_USER }}/app:${{ github.sha }}
+       docker push ${{ secrets.DOCKER_USER }}/app:latest
