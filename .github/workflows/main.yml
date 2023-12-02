@@ -17,7 +17,7 @@ jobs:
         run: docker login -u ${{ secrets.DOCKER_USER }} -p ${{ secrets.DOCKER_PASSWORD }}
 
       - name: 3 Build APP IMAGE
-        run: docker build -t app -f /src/app/backend/dockerfile_api .
+        run: docker build -t app -f ./src/app/backend/dockerfile_api .
 
       - name: 4 Tags
         run: |
