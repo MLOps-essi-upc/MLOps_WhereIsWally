@@ -1,0 +1,8 @@
+FROM python:3.9-slim
+WORKDIR /app
+COPY src/ ./src/
+COPY models/ ./models/
+RUN pip install --no-cache-dir -r src/app/backend/requirements_api.txt
+RUN apt-get update && apt-get install ffmpeg libsm6 libxext6  -y
+EXPOSE 5000
+ENTRYPOINT [ "uvicorn", "src.app.backend.api:app", "--host", "0.0.0.0","--port","5000", "--reload", "--reload-dir", "src/app/backend","--reload-dir", "models"]
