@@ -10,21 +10,21 @@ jobs:
     name: Push Docker image to Docker Hub
     runs-on: ubuntu-latest
     steps:
-      - name: Copy repository
+      - name: 1 Copy repository
         uses: actions/checkout@v2
 
-      - name: Docker login
+      - name: 2 Docker login
         run: docker login -u ${{ secrets.DOCKER_USER }} -p ${{ secrets.DOCKER_PASSWORD }}
 
-      - name: Build APP IMAGE
+      - name: 3 Build APP IMAGE
         run: docker build -t app -f /src/app/backend/dockerfile_api .
 
-      - name: Tags
+      - name: 4 Tags
         run: |
           docker tag app ${{ secrets.DOCKER_USER }}/app:${{ github.sha }}
           docker tag app ${{ secrets.DOCKER_USER }}/app:latest
 
-      - name: Push
+      - name: 5 SPush
         run: |
           docker push ${{ secrets.DOCKER_USER }}/app:${{ github.sha }}
           docker push ${{ secrets.DOCKER_USER }}/app:latest
