@@ -12,6 +12,7 @@ import cv2
 from src import MODELS_DIR, API_DIR
 from ultralytics import YOLO
 import os
+from prometheus_fastapi_instrumentator import Instrumentator, metrics
 model_wrappers_list: List[dict] = []
 
 # Define application
@@ -20,6 +21,8 @@ app = FastAPI(
     description="lorem ipsum",
     version="0.1",
 )
+
+Instrumentator().instrument(app).expose(app) #Prometheus metric tracking
 
 
 def construct_response(f):
