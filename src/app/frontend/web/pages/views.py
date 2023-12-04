@@ -13,6 +13,11 @@ import cv2
 @csrf_exempt
 def upload_image(request):
     if request.method == 'POST' and request.FILES.get('image'):
+
+        model_request = request.GET.get('model', "all")
+        print("model_request", model_request)
+        
+
         image = request.FILES['image'].read()
 
         # API call
@@ -20,7 +25,8 @@ def upload_image(request):
         data = {
             'file': image
         }
-        response = requests.post(api.PREDICT,files=data)
+        url= api.PREDICT+model_request
+        response = requests.post(url,files=data)
         
         # #convert reponse data into json
         response = response.json()
