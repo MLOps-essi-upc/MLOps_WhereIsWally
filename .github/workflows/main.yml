@@ -1,0 +1,54 @@
+name: Publish Docker image to DockerHub
+
+on:
+  push:
+    branches:
+      - develop
+
+jobs:
+  push_app_to_registry:
+    name: Push APP Docker image to Docker Hub
+    runs-on: ubuntu-latest
+    steps:
+      - name: 1 Copy repository
+        uses: actions/checkout@v2
+
+      - name: 2 Docker login
+        run: docker login -u ${{ secrets.DOCKER_USER }} -p ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: 3 Build APP IMAGE
+        run: docker build -t app -f ./src/app/backend/dockerfile_api .
+
+      - name: 4 Tag
+        run: |
+          docker tag app ${{ secrets.DOCKER_USER }}/app:${{ github.sha }}
+          docker tag app ${{ secrets.DOCKER_USER }}/app:latest
+
+      - name: 5 SPush
+        run: |
+          docker push ${{ secrets.DOCKER_USER }}/app:${{ github.sha }}
+          docker push ${{ secrets.DOCKER_USER }}/app:latest
+
+
+  push_web_to_registry:
+    name: Push WEB Docker image to Docker Hub
+    runs-on: ubuntu-latest
+    steps:
+      - name: 1 Copy repository
+        uses: actions/checkout@v2
+
+      - name: 2 Docker login
+        run: docker login -u ${{ secrets.DOCKER_USER }} -p ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: 3 Build APP IMAGE
+        run: docker build -t web -f ./src/app/frontend/dockerfile_web .
+
+      - name: 4 Tag
+        run: |
+          docker tag web ${{ secrets.DOCKER_USER }}/web:${{ github.sha }}
+          docker tag web ${{ secrets.DOCKER_USER }}/web:latest
+
+      - name: 5 SPush
+        run: |
+          docker push ${{ secrets.DOCKER_USER }}/web:${{ github.sha }}
+          docker push ${{ secrets.DOCKER_USER }}/web:latest
