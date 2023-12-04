@@ -12,7 +12,6 @@ import cv2
 
 @csrf_exempt
 def upload_image(request):
-    print("request", request)
     if request.method == 'POST' and request.FILES.get('image'):
 
         model_request = request.GET.get('model', "all")
