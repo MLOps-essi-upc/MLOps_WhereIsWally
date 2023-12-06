@@ -6,3 +6,4 @@ fastapi-socketio>=0.0.10
 httptools==0.1.2
 uvicorn>=0.15.0,<0.16.0
 python-dotenv>=1.0.0
+prometheus-fastapi-instrumentator>=6.1.0
