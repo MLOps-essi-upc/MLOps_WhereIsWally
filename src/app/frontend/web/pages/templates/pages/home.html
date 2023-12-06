@@ -194,7 +194,7 @@
             <h2>Select a Model</h2>
             <ul id="model-selection-list">
                 <li class="model-option selected-model" data-keyword="all">Model that finds all characters</li>
-                <li class="model-option" data-keyword="wally">Model that only finds Waldo</li>
+                <li class="model-option" data-keyword="wally">Model that only finds Wally</li>
             </ul>
         </div>
     
@@ -241,16 +241,10 @@
         const modelOptions = document.querySelectorAll('.model-option');
         modelOptions.forEach(function(option) {
             option.addEventListener('click', function() {
-                // Remove the selected class from all model options
                 modelOptions.forEach(function(opt) {
                     opt.classList.remove('selected-model');
                 });
-
-            // Add the selected class to the clicked option
             option.classList.add('selected-model');
-
-            // You can also update the server or UI based on the selection here
-            console.log(option.textContent + ' selected');
              });
         });
 
@@ -289,7 +283,7 @@
             const selectedModelKeyword = selectedModelElement ? selectedModelElement.dataset.keyword : null;
 
             const imagePreview = document.getElementById('uploaded-image');
-            imagePreview.style.display = 'none'; // Hide the image preview
+            imagePreview.style.display = 'none';
 
     
             // Show spinner
@@ -312,7 +306,11 @@
                 })
                 .then(response => {
                     if (!response.ok) {
-                        throw new Error('Network response was not ok');
+                        return response.json().then(errorData => {
+                            const error = new Error(errorData.detail.detail || 'Network response was not ok');
+                            error.isCustomError = true;
+                            throw error;
+                        });
                     }
                     return response.json();
                 }
@@ -321,17 +319,13 @@
                     const encodedImg = data.encoded_img;
                     const imagePreview = document.getElementById('uploaded-image');
                     const boxes =  data.boxes;
+                    const found = data.found
 
                     const dataIsEmpty = isDataEmpty(boxes);
-                    if(dataIsEmpty){
-                        document.getElementById('error-message').textContent = "We are very sorry but the model was not able to find Wally. Please try with the other model";
+                    if(!found){
+                        document.getElementById('error-message').textContent = data.message + "Please try the other model.";
                         document.getElementById('error-message').style.display = 'block';
                     }
-                    
-
-                    console.log("boxes", boxes);
-    
-                    console.log('Is data empty:', dataIsEmpty);
                     imagePreview.src = `data:image/png;base64, ${encodedImg}`;
                     imagePreviewContainer.style.display = 'block';
                     imagePreview.style.display = 'block';
@@ -341,13 +335,13 @@
 
                 })
                 .catch(error => {
-                    console.error('Error:', error);
-            
+                    const errorMessage = error.isCustomError ? error.message : "An unexpected error occurred.";
+
                     // Hide spinner in case of error as well
                     document.getElementById('spinner').style.display = 'none';
 
-                       // Display error message
-                    document.getElementById('error-message').textContent = error.message;
+                    // Display error message
+                    document.getElementById('error-message').textContent = errorMessage;
                     document.getElementById('error-message').style.display = 'block';
 
                 });

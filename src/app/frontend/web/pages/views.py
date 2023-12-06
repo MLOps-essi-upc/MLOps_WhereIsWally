@@ -13,25 +13,28 @@ import cv2
 @csrf_exempt
 def upload_image(request):
     if request.method == 'POST' and request.FILES.get('image'):
+        try:
+            model_request = request.GET.get('model', "all")
+            image = request.FILES['image'].read()
+            data = {
+                'file': image
+            }
+            url= api.PREDICT+model_request
+            response = requests.post(url,files=data)
 
-        model_request = request.GET.get('model', "all")
-        print("model_request", model_request)
+            if response.status_code != 200:
+                return JsonResponse({
+                    'status': 'error',
+                    'message': f'Error from server: {response.status_code}',
+                    'detail': response.json()
+                }, status=response.status_code, )
+
+            response_data = response.json()
+            return JsonResponse(response_data)
+
         
-
-        image = request.FILES['image'].read()
-
-        # API call
-        # TODO: not working the endpoint call 
-        data = {
-            'file': image
-        }
-        url= api.PREDICT+model_request
-        response = requests.post(url,files=data)
-        
-        # #convert reponse data into json
-        response = response.json()
-
-        return JsonResponse(response)
+        except requests.exceptions.RequestException as e:
+            return JsonResponse({'status': 'error', 'message': str(e)})
 
     return JsonResponse({'status': 'error'})
 
