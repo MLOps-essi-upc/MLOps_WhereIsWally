@@ -1,0 +1,2 @@
+FROM grafana/grafana:7.5.7 ./grafana/provisioning/datasources:/etc/grafana/provisioning/datasources
+    - ./grafana/config.ini:/etc/grafana/config.ini

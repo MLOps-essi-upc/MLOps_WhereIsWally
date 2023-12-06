@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="https://i.postimg.cc/gkVR7Q6t/wallyicon.png">
+
+    <title>Where Is Wally?</title>
+    <style>
+        body {
+            background-color: #fff;
+            margin: 0;
+            font-family: 'Helvetica', sans-serif;
+        }
+
+        #header {
+            background-color: #ddd;
+            color: #ec1717;
+            height: 20vh;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 10px;
+            margin: 0;
+        }
+        
+        #header h1 {
+            flex-grow: 1;
+            text-align: center;
+        }
+        
+        #left-header-image, #right-header-image {
+            height: auto;
+            max-height: 100%;
+        }
+        
+
+        #options-container {
+            max-width: 25%;
+            margin-left: 10px;
+        }
+
+        #options {
+            background-color: #fff;
+            padding: 10px;
+            text-align: left;
+            font-size: 24px;
+            margin-top: 5px;
+        }
+
+        .option {
+            display: block;
+            cursor: pointer;
+            transition: font-weight 0.3s;
+        }
+
+        .option:hover {
+            font-weight: bold;
+        }
+
+        #upload-container {
+        text-align: center;
+        position: absolute;
+        top: 40%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        }
+
+        #upload-button {
+            background-color: #fff;
+            color: #333;
+            border: 2px solid #ddd;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s, font-weight 0.3s; /* Added transition for background and font-weight on hover */
+        }
+
+        #upload-button:hover {
+            background-color: #eee;
+            font-weight: bold; /* Bold text on hover */
+        }
+
+        #image-input {
+            display: none;
+        }
+
+        #image-preview-container {
+            display: none;
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        #uploaded-image {
+            max-width: 100%;
+            max-height: 400px;
+        }
+
+        #detect-button {
+            background-color: #000;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 20px;
+            display: none;
+        }
+
+        #content-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            width: calc(100% - 25% - 10px);
+            margin-left: 10px;
+        }
+
+        .loader {
+            border: 5px solid #f3f3f3; 
+            border-top: 5px solid #3498db;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 2s linear infinite;
+            display: inline-flex;
+            margin-top: 30px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        #error-message {
+            color: red;
+            padding-top: 30px;
+            font-size: 20px;
+        }
+
+        #main-container {
+            display: flex;
+            width: 100%;
+        }
+        
+        #model-selection-container {
+            flex: 0 0 20%;
+            background-color: #f0f0f0;
+            padding: 20px;
+            box-sizing: border-box;
+            overflow-y: auto;
+        }
+        
+        #image-selection-container {
+            flex: 1;
+            background-color: #fff;
+            padding: 20px;
+            box-sizing: border-box;
+            position: relative;
+        }
+        
+        #model-selection-list {
+            list-style-type: none;
+            padding: 0;
+        }
+        
+        .model-option {
+            cursor: pointer;
+            padding: 10px;
+            border: 1px solid #ddd;
+            margin-bottom: 5px;
+        }
+
+        .selected-model {
+            background-color: #3498db;
+            color: white; 
+        }
+        
+    </style>
+</head>
+
+<body>
+
+    <div id="header">
+        <img src="https://i.postimg.cc/9QDKwbdc/temp-Image-Cthb-Rb.jpg" alt="Left Image" id="left-header-image">
+        <h1>Where Is Wally?</h1>
+        <img src="https://i.postimg.cc/02WhNFJt/temp-Image-U78-DG4.jpg" alt="Right Image" id="right-header-image">
+    </div>
+
+    <div id="main-container">
+
+        <div id="model-selection-container">
+            <h2>Select a Model</h2>
+            <ul id="model-selection-list">
+                <li class="model-option selected-model" data-keyword="all">Model that finds all characters</li>
+                <li class="model-option" data-keyword="wally">Model that only finds Wally</li>
+            </ul>
+        </div>
+    
+        <div id="image-selection-container">
+            <div id="content-container">
+                <div id="upload-container">
+                    <form id="upload-form" method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <label for="image-input" id="upload-button">Choose Image</label>
+                        <input type="file" name="image" id="image-input" accept="image/*">
+                        <div id="image-preview-container">
+                            <img id="uploaded-image" alt="Uploaded Image">
+                            <div id="spinner"  style="display: none;">
+                                <div class="loader">
+                                    <p>Loading...</p>
+                                </div>
+                            </div>
+                        </div>
+                        <button type="button" id="detect-button" onclick="detectWally()">Where is Wally?</button>
+                    </form>
+                    <div id="error-message" style="display: none; color: red;"></div>
+                </div>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+    
+    
+    <script>
+        const uploadContainer = document.getElementById('upload-container');
+        const detectButton = document.getElementById('detect-button');
+        const imagePreviewContainer = document.getElementById('image-preview-container');
+
+        const modelSelectionList = document.getElementById('model-selection-list');
+
+        document.addEventListener('DOMContentLoaded', (event) => {
+            const modelOptions = document.querySelectorAll('.model-option');
+            if (modelOptions.length > 0) {
+                modelOptions[0].classList.add('selected-model');
+            }
+        });
+        
+        const modelOptions = document.querySelectorAll('.model-option');
+        modelOptions.forEach(function(option) {
+            option.addEventListener('click', function() {
+                modelOptions.forEach(function(opt) {
+                    opt.classList.remove('selected-model');
+                });
+            option.classList.add('selected-model');
+             });
+        });
+
+    
+        document.getElementById('image-input').addEventListener('change', function (event) {
+            const input = event.target;
+            const imagePreview = document.getElementById('uploaded-image');
+    
+            const file = input.files[0];
+            if (file) {
+                const reader = new FileReader();
+    
+                reader.onload = function (e) {
+                    imagePreview.src = e.target.result;
+                };
+    
+                reader.readAsDataURL(file);
+    
+                imagePreviewContainer.style.display = 'block';
+                detectButton.style.display = 'block';
+            } else {
+                imagePreview.src = '';
+                imagePreviewContainer.style.display = 'none';
+                detectButton.style.display = 'none';
+            }
+        });
+
+        function isDataEmpty(boxes) {
+            return Object.keys(boxes).length === 0;
+        }
+
+    
+        function detectWally() {
+            var formData = new FormData(document.getElementById('upload-form'));
+            const selectedModelElement = document.querySelector('.model-option.selected-model');
+            const selectedModelKeyword = selectedModelElement ? selectedModelElement.dataset.keyword : null;
+
+            const imagePreview = document.getElementById('uploaded-image');
+            imagePreview.style.display = 'none';
+
+    
+            // Show spinner
+            document.getElementById('spinner').style.display = 'block';
+
+            // Hide previous error messages
+            document.getElementById('error-message').style.display = 'none';
+
+            var queryParams = new URLSearchParams({
+                model: selectedModelKeyword,
+            }).toString();
+
+            var url = 'upload_image?' + queryParams;
+
+    
+            fetch(url, {
+                    method: 'POST',
+                    body: formData,
+                    
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        return response.json().then(errorData => {
+                            const error = new Error(errorData.detail.detail || 'Network response was not ok');
+                            error.isCustomError = true;
+                            throw error;
+                        });
+                    }
+                    return response.json();
+                }
+                )
+                .then(data => {
+                    const encodedImg = data.encoded_img;
+                    const imagePreview = document.getElementById('uploaded-image');
+                    const boxes =  data.boxes;
+                    const found = data.found
+
+                    const dataIsEmpty = isDataEmpty(boxes);
+                    if(!found){
+                        document.getElementById('error-message').textContent = data.message + "Please try the other model.";
+                        document.getElementById('error-message').style.display = 'block';
+                    }
+                    imagePreview.src = `data:image/png;base64, ${encodedImg}`;
+                    imagePreviewContainer.style.display = 'block';
+                    imagePreview.style.display = 'block';
+
+                    // Hide spinner
+                    document.getElementById('spinner').style.display = 'none';
+
+                })
+                .catch(error => {
+                    const errorMessage = error.isCustomError ? error.message : "An unexpected error occurred.";
+
+                    // Hide spinner in case of error as well
+                    document.getElementById('spinner').style.display = 'none';
+
+                    // Display error message
+                    document.getElementById('error-message').textContent = errorMessage;
+                    document.getElementById('error-message').style.display = 'block';
+
+                });
+
+        }
+    
+        document.getElementById('upload-form').addEventListener('submit', function (e) {
+            e.preventDefault();
+            document.getElementById('image-input').value = '';
+            document.getElementById('uploaded-image').src = '';
+            imagePreviewContainer.style.display = 'none';
+            detectButton.style.display = 'none';
+            hideUploadContainer();
+        });
+    </script>
+    
+    
+</body>
+
+</html>

@@ -1,0 +1,3 @@
+FROM grafana/grafana:7.5.7
+ADD src/app/grafana /etc/grafana/provisioning/datasources
+ADD src/app/grafana/config.ini /etc/grafana/config.ini
