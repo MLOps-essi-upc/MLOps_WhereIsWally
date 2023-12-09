@@ -39,6 +39,5 @@ def upload_image(request):
 
     return JsonResponse({"status": "error"})
 
-
 def home(request):
     return render(request, "pages/home.html", {})

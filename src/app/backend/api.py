@@ -2,7 +2,6 @@
 
 import asyncio
 import base64
-import os
 from datetime import datetime
 from functools import wraps
 from http import HTTPStatus
@@ -13,8 +12,11 @@ import numpy as np
 from fastapi import FastAPI, File, HTTPException, Request, Response, UploadFile
 from ultralytics import YOLO
 from ultralytics.utils.plotting import Annotator
-
-from src import API_DIR, MODELS_DIR
+from src import MODELS_DIR
+from ultralytics import YOLO
+import os
+import asyncio
+from prometheus_fastapi_instrumentator import Instrumentator, metrics
 
 model_wrappers_list: List[dict] = []
 
@@ -24,6 +26,39 @@ app = FastAPI(
     description="Upload an image and we will help you to find Wally",
     version="0.1",
 )
+
+instrumentator = Instrumentator(
+    should_group_status_codes=False,
+    should_ignore_untemplated=True,
+    should_respect_env_var=True,
+    should_instrument_requests_inprogress=True,
+    excluded_handlers=[".*admin.*", "/metrics"],
+    env_var_name="ENABLE_METRICS",
+    inprogress_name="inprogress",
+    inprogress_labels=True,
+)
+
+instrumentator.add(
+    metrics.request_size(
+        should_include_handler=True,
+        should_include_method=False,
+        should_include_status=True,
+        metric_namespace="a",
+        metric_subsystem="b",
+    )
+).add(
+    metrics.response_size(
+        should_include_handler=True,
+        should_include_method=False,
+        should_include_status=True,
+        metric_namespace="namespace",
+        metric_subsystem="subsystem",
+    )
+)
+
+instrumentator.instrument(app)
+
+instrumentator.expose(app, include_in_schema=False, should_gzip=True)
 
 
 def construct_response(f):
@@ -71,6 +106,7 @@ def construct_response(f):
             }
 
     return wrap
+
 
 
 @app.on_event("startup")

@@ -13,6 +13,7 @@ def client():
     with TestClient(app) as client:
         return client
 
+
 def test_get_main(client):
     response = client.get("/")
     assert response.status_code == HTTPStatus.OK.value
@@ -23,6 +24,7 @@ def test_get_main(client):
     assert response_body["message"] == HTTPStatus.OK.phrase
     assert response_body["data"]["message"] == "Welcome to Where is Wally!"
 
+
 def test_predict_with_invalid_file(client):
     current_dir = os.path.dirname(os.path.abspath(__file__))
     file_path = os.path.join(current_dir, 'testing_file.txt')
@@ -30,6 +32,7 @@ def test_predict_with_invalid_file(client):
         response = client.post("/predict/all", files={"file": file})
     assert response.status_code == 400
     assert "Invalid image file" in response.text
+
 
 def test_predict_with_valid_image_wally_found_model_all(client):
     current_dir = os.path.dirname(os.path.abspath(__file__))
@@ -42,6 +45,7 @@ def test_predict_with_valid_image_wally_found_model_all(client):
     assert "boxes" in  response_body
     assert 'orig_shape' in response_body['boxes']
     assert len(response_body['boxes']['orig_shape']) > 0
+
 
 def test_predict_with_valid_image_wally_not_found(client):
     current_dir = os.path.dirname(os.path.abspath(__file__))
@@ -56,6 +60,7 @@ def test_predict_with_valid_image_wally_not_found(client):
     assert "Processing completed, but Wally was not found in the image." in response.text
     assert len(response_body['boxes']) == 0
 
+
 def test_predict_with_valid_image_model_wally(client):
     current_dir = os.path.dirname(os.path.abspath(__file__))
     file_path = os.path.join(current_dir, 'testing_img.png')
@@ -67,3 +72,4 @@ def test_predict_with_valid_image_model_wally(client):
     assert "boxes" in  response_body
     assert 'orig_shape' in response_body['boxes']
     assert len(response_body['boxes']['orig_shape']) > 0
+
