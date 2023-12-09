@@ -1,18 +1,21 @@
 """Main script: it includes our API initialization and endpoints."""
 
+import asyncio
 import base64
+import os
 from datetime import datetime
 from functools import wraps
 from http import HTTPStatus
 from typing import List
-from fastapi import FastAPI, HTTPException, Request, File, UploadFile,Response
-from ultralytics.utils.plotting import Annotator
-import numpy as np
+
 import cv2
-from src import MODELS_DIR, API_DIR
+import numpy as np
+from fastapi import FastAPI, File, HTTPException, Request, Response, UploadFile
 from ultralytics import YOLO
-import os
-import asyncio
+from ultralytics.utils.plotting import Annotator
+
+from src import API_DIR, MODELS_DIR
+
 model_wrappers_list: List[dict] = []
 
 # Define application
@@ -42,11 +45,11 @@ def construct_response(f):
                 "timestamp": datetime.now().isoformat(),
                 "url": request.url._url,
                 "data": results.get("data", {}),
-                "found": results.get("found", None)
+                "found": results.get("found", None),
             }
 
             # Include additional keys if present
-            for key in ['boxes', 'conf', 'encoded_img']:
+            for key in ["boxes", "conf", "encoded_img"]:
                 if key in results:
                     response[key] = results[key]
 
@@ -70,7 +73,6 @@ def construct_response(f):
     return wrap
 
 
-
 @app.on_event("startup")
 def _load_models():
     """Loads all pickled models found in `MODELS_DIR` and adds them to `models_list`"""
@@ -85,11 +87,11 @@ def _load_models():
         with open(path, "rb") as file:
             # model_wrapper = pickle.load(file)
             # model_wrappers_list.append(model_wrapper)
-            model_wrapper=dict()
+            model_wrapper = dict()
             model = YOLO(path)
-            model_wrapper["model"]=model
-            model_wrapper["type"]=str(file).split("_")[-1].split(".")[0]
-            model_wrapper["info"]=model.info()
+            model_wrapper["model"] = model
+            model_wrapper["type"] = str(file).split("_")[-1].split(".")[0]
+            model_wrapper["info"] = model.info()
             model_wrappers_list.append(model_wrapper)
 
 
@@ -104,7 +106,7 @@ def _index(request: Request):
         "data": {"message": "Welcome to Where is Wally!"},
     }
     return response
-    
+
 
 @app.get("/models", tags=["Prediction"])
 @construct_response
@@ -114,7 +116,7 @@ def _get_models_list(request: Request, type: str = None):
     available_models = [
         {
             "type": model["type"],
-            "info":model["info"],
+            "info": model["info"],
             # "parameters": model["params"],
             # "accuracy": model["metrics"],
         }
@@ -134,20 +136,24 @@ def _get_models_list(request: Request, type: str = None):
 
 @construct_response
 @app.post("/predict/{type}")
-async def _predict(type: str,file: UploadFile = File(...)):
+async def _predict(type: str, file: UploadFile = File(...)):
     model_wrapper = next((m for m in model_wrappers_list if m["type"] == type), None)
 
     if not model_wrapper:
-        raise HTTPException(status_code=HTTPStatus.BAD_REQUEST, detail="Model not found")
-    
+        raise HTTPException(
+            status_code=HTTPStatus.BAD_REQUEST, detail="Model not found"
+        )
+
     else:
-        model = model_wrapper['model']
+        model = model_wrapper["model"]
         contents = await file.read()
         nparr = np.frombuffer(contents, np.uint8)
         img = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
         if img is None:
-            raise HTTPException(status_code=HTTPStatus.BAD_REQUEST, detail="Invalid image file")
-        else: 
+            raise HTTPException(
+                status_code=HTTPStatus.BAD_REQUEST, detail="Invalid image file"
+            )
+        else:
             results = model.predict(source=img, conf=0.25)
             boxes = results[0].boxes.xyxy
             conf = results[0].boxes.conf
@@ -156,27 +162,29 @@ async def _predict(type: str,file: UploadFile = File(...)):
                 annotator = Annotator(img)
                 boxes = r.boxes
                 for box in boxes:
-                    b = box.xyxy[0]  # get box coordinates in (top, left, bottom, right) format
+                    b = box.xyxy[
+                        0
+                    ]  # get box coordinates in (top, left, bottom, right) format
                     c = box.cls
                     color = (0, 0, 0)
                     annotator.box_label(b, model.names[int(c)], color=color)
 
             return_img = annotator.result()
 
-            _, encoded_img = cv2.imencode('.PNG', return_img)
+            _, encoded_img = cv2.imencode(".PNG", return_img)
             encoded_img = base64.b64encode(encoded_img)
             is_empty = len(boxes) == 0
-            if(is_empty):
+            if is_empty:
                 return {
-                    'boxes': boxes,
-                    'encoded_img': encoded_img.decode(),
-                    'message': "Processing completed, but Wally was not found in the image.",
-                    'found': False,
+                    "boxes": boxes,
+                    "encoded_img": encoded_img.decode(),
+                    "message": "Processing completed, but Wally was not found in the image.",
+                    "found": False,
                 }
-            
+
             return {
-                'boxes': boxes,
-                'conf': conf,
-                'encoded_img': encoded_img.decode(),
-                'found': True
+                "boxes": boxes,
+                "conf": conf,
+                "encoded_img": encoded_img.decode(),
+                "found": True,
             }
