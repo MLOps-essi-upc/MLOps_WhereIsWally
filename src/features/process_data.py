@@ -1,3 +1,4 @@
+"""Module process data"""
 # importing libraries
 import os
 import shutil
@@ -12,6 +13,7 @@ from src import PROCESSED_DATA_DIR, RAW_DATA_DIR
 
 
 def noise_removal(img_path):
+    """Function for noise removal."""
     # Reading image from folder where it is stored
     img = cv2.imread(img_path)
     # denoising of image saving it into dst image
@@ -21,12 +23,14 @@ def noise_removal(img_path):
 
 
 def rgb2gray(img_path):
+    """Function rgb2gray."""
     img = cv2.imread(img_path)
     gray = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
     # blurred = cv2.GaussianBlur(gray, (5, 5), 0)
     return gray
 
 def get_images_path(directory_name):
+    """Function that gets images path."""
     imgs_path={}
     for file in listdir(directory_name):
         if isfile(join(directory_name, file)):
@@ -34,6 +38,13 @@ def get_images_path(directory_name):
     return imgs_path
 
 def auto_canny_edge_detection(path, sigma=0.33):
+    """
+    Perform automatic Canny edge detection on an image.
+    This function reads an image from the given file path, then applies the Canny edge
+    detection algorithm with threshold values determined automatically. The thresholds are
+    set based on the median pixel intensity of the image, adjusted by a factor defined by
+    the 'sigma' parameter.
+    """
     image = cv2.imread(path)
     median = np.median(image)
     lower_value = int(max(0, (1.0-sigma) * median))
@@ -41,6 +52,7 @@ def auto_canny_edge_detection(path, sigma=0.33):
     return cv2.Canny(image, lower_value, upper_value)
 
 def image_processing(src_imgs_dir,dst_imgs_dir):
+    """Function that processes images"""
     imgs_path=get_images_path(src_imgs_dir)
 
     for image_name,path in imgs_path.items():
@@ -49,6 +61,13 @@ def image_processing(src_imgs_dir,dst_imgs_dir):
         cv2.imwrite(str(dst_imgs_dir / image_name),gray)
 
 def copy_labels(src,dest):
+    """
+    Copy all files from a source directory to a destination directory.
+    This function lists all files in the source directory specified by 'src',
+    and then copies each file to the destination directory specified by 'dest'.
+    It does not copy subdirectories or their contents, only files directly
+    within the source directory.
+    """
     src_files = os.listdir(src)
     for file_name in src_files:
         full_file_name = os.path.join(src, file_name)
@@ -56,6 +75,9 @@ def copy_labels(src,dest):
             shutil.copy(full_file_name, dest)
 
 def main():
+    """
+    Main function
+    """
     train_imgs_dir=RAW_DATA_DIR / "train/images"
     valid_imgs_dir=RAW_DATA_DIR / "valid/images"
     test_imgs_dir=RAW_DATA_DIR / "test/images"
