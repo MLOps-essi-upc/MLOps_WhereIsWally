@@ -162,7 +162,7 @@ async def _predict(type: str,file: UploadFile = File(...)):
                 for box in boxes:
                     b = box.xyxy[0]  # get box coordinates in (top, left, bottom, right) format
                     c = box.cls
-                    color = (0, 0, 0)
+                    color = (0, 255, 0)
                     annotator.box_label(b, model.names[int(c)], color=color)
 
             return_img = annotator.result()
