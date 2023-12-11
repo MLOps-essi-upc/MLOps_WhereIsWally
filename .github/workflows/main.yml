@@ -20,7 +20,9 @@ jobs:
       - name: Install dependencies  
         run: |  
           python -m pip install --upgrade pip 
-          pip install http, pytest, fastapi.testclient  
+          pip install http
+          pip install pytest
+          pip install fastapi.testclient  
           #if [ -f requirements.txt ]; then cat requirements.txt | xargs -n 1 pip install; fi #pip install -r requirements.txt; fi  
       - name: Lint with Ruff  
         run: |  
