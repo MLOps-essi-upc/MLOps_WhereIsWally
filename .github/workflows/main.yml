@@ -20,7 +20,7 @@ jobs:
       - name: Install dependencies  
         run: |  
           python -m pip install --upgrade pip 
-          sudo apt-get install python-requests #pip install requests
+          sudo apt-get install python3-requests #pip install requests
           pip install http
           pip install pytest
           pip install fastapi.testclient  
