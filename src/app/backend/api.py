@@ -28,7 +28,7 @@ app = FastAPI(
 )
 
 
-Instrumentator().instrument(app).expose(app) #Prometheus metric tracking
+Instrumentator().instrument(app).expose(app)  # Prometheus metric tracking
 
 
 def construct_response(f):
@@ -78,7 +78,6 @@ def construct_response(f):
     return wrap
 
 
-
 @app.on_event("startup")
 def _load_models():
     """Loads all pickled models found in `MODELS_DIR` and adds them to `models_list`"""
@@ -112,6 +111,7 @@ def _index(request: Request):
         "data": {"message": "Welcome to Where is Wally!"},
     }
     return response
+
 
 @app.get("/models", tags=["Prediction"])
 @construct_response
