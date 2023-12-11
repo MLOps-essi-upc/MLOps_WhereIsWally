@@ -8,9 +8,18 @@ global:
   # external systems (federation, remote storage, Alertmanager).
   external_labels:
     monitor: "codelab-monitor"
+    
+alerting:
+  alertmanagers:   
+    - scheme: http
+      static_configs:
+      - targets: [ 'alertmanager:9093' ]
+
 
 # Load rules once and periodically evaluate them according to the global 'evaluation_interval'.
 rule_files:
+  - alert.rules.yml
+      
   # - "first.rules"
   # - "second.rules"
 
@@ -40,4 +49,3 @@ scrape_configs:
   - job_name: fastApi
     static_configs:
      - targets: ["10.4.41.34:5000"]
-

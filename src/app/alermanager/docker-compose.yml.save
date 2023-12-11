@@ -1,0 +1,11 @@
+alertmanager:
+    build:
+      dockerfile: dockerfile_alert
+      co
+    restart: unless-stopped
+    ports:
+      - "9093:9093"
+    volumes:
+      - "./alertmanager:/config"
+      - alertmanager-data:/data
+    command: --config.file=/config/alertmanager.yml --log.level=debug

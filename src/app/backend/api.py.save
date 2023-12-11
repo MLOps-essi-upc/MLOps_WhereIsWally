@@ -2,6 +2,7 @@
 
 import asyncio
 import base64
+import os
 from datetime import datetime
 from functools import wraps
 from http import HTTPStatus
@@ -14,7 +15,6 @@ from ultralytics import YOLO
 from ultralytics.utils.plotting import Annotator
 from src import MODELS_DIR
 from ultralytics import YOLO
-import os
 import asyncio
 from prometheus_fastapi_instrumentator import Instrumentator, metrics
 
@@ -27,8 +27,38 @@ app = FastAPI(
     version="0.1",
 )
 
+instrumentator = Instrumentator(
+    should_group_status_codes=False,
+    should_ignore_untemplated=True,
+    should_respect_env_var=True,
+    should_instrument_requests_inprogress=True,
+    excluded_handlers=[".*admin.*", "/metrics"],
+    env_var_name="ENABLE_METRICS",
+    inprogress_name="inprogress",
+    inprogress_labels=True,
+)
 
-Instrumentator().instrument(app).expose(app) #Prometheus metric tracking
+instrumentator.add(
+    metrics.request_size(
+        should_include_handler=True,
+        should_include_method=False,
+        should_include_status=True,
+        metric_namespace="a",
+        metric_subsystem="b",
+    )
+).add(
+    metrics.response_size(
+        should_include_handler=True,
+        should_include_method=False,
+        should_include_status=True,
+        metric_namespace="namespace",
+        metric_subsystem="subsystem",
+    )
+)
+
+instrumentator.instrument(app)
+
+instrumentator.expose(app, include_in_schema=False, should_gzip=True)
 
 
 def construct_response(f):
@@ -113,6 +143,7 @@ def _index(request: Request):
     }
     return response
 
+
 @app.get("/models", tags=["Prediction"])
 @construct_response
 def _get_models_list(request: Request, type: str = None):
@@ -155,10 +186,15 @@ async def _predict(type: str, file: UploadFile = File(...)):
         nparr = np.frombuffer(contents, np.uint8)
         img = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
         if img is None:
+<<<<<<< HEAD
             raise HTTPException(
                 status_code=HTTPStatus.BAD_REQUEST, detail="Invalid image file"
             )
         else:
+=======
+            raise HTTPException(status_code=HTTPStatus.BAD_REQUEST, detail="Invalid image file")
+        else: 
+>>>>>>> API_develop
             results = model.predict(source=img, conf=0.25)
             boxes = results[0].boxes.xyxy
             conf = results[0].boxes.conf
@@ -167,15 +203,20 @@ async def _predict(type: str, file: UploadFile = File(...)):
                 annotator = Annotator(img)
                 boxes = r.boxes
                 for box in boxes:
+<<<<<<< HEAD
                     b = box.xyxy[
                         0
                     ]  # get box coordinates in (top, left, bottom, right) format
+=======
+                    b = box.xyxy[0]  # get box coordinates in (top, left, bottom, right) format
+>>>>>>> API_develop
                     c = box.cls
-                    color = (0, 255, 0)
+                    color = (0, 0, 0)
                     annotator.box_label(b, model.names[int(c)], color=color)
 
             return_img = annotator.result()
 
+<<<<<<< HEAD
             _, encoded_img = cv2.imencode(".PNG", return_img)
             encoded_img = base64.b64encode(encoded_img)
             is_empty = len(boxes) == 0
@@ -192,4 +233,22 @@ async def _predict(type: str, file: UploadFile = File(...)):
                 "conf": conf,
                 "encoded_img": encoded_img.decode(),
                 "found": True,
+=======
+            _, encoded_img = cv2.imencode('.PNG', return_img)
+            encoded_img = base64.b64encode(encoded_img)
+            is_empty = len(boxes) == 0
+            if(is_empty):
+                return {
+                    'boxes': boxes,
+                    'encoded_img': encoded_img.decode(),
+                    'message': "Processing completed, but Wally was not found in the image.",
+                    'found': False,
+                }
+            
+            return {
+                'boxes': boxes,
+                'conf': conf,
+                'encoded_img': encoded_img.decode(),
+                'found': True
+>>>>>>> API_develop
             }

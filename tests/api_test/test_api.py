@@ -13,7 +13,6 @@ def client():
     with TestClient(app) as client:
         return client
 
-
 def test_get_main(client):
     response = client.get("/")
     assert response.status_code == HTTPStatus.OK.value
