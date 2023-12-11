@@ -1,3 +1,4 @@
+"""Module for model testing."""
 # pylint: disable=redefined-outer-name
 import pickle
 
@@ -11,14 +12,17 @@ from src.models.evaluate import load_validation_data
 
 @pytest.fixture
 def yov8_model():
+    """Function that loads yolo8 model."""
     with open(MODELS_DIR / "yolov8_model.pkl", "rb") as file:
         return pickle.load(file)
 
 @pytest.fixture
 def get_validation_data():
+    """Function that gets validation data."""
     return load_validation_data(PROCESSED_DATA_DIR)
 
 def test_model_expected_value(yov8_model, get_validation_data):
+    """Function that tests model expected value."""
     x, _ = get_validation_data  # pylint: disable=invalid-name
 
     val_predictions = yov8_model.predict(x,imgsz=640, conf=0.0033) # pylint: disable=unused-variable
