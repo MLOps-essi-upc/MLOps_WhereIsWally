@@ -71,4 +71,3 @@ def test_predict_with_valid_image_model_wally(client):
     assert "boxes" in  response_body
     assert 'orig_shape' in response_body['boxes']
     assert len(response_body['boxes']['orig_shape']) > 0
-
