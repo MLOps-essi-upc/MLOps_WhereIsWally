@@ -4,3 +4,9 @@
 /.idea
 .idea
 .DS_Store
+
+/node_exporter-1.7.0.linux-amd64
+/venv
+.save
+.pyc
+
