@@ -3,6 +3,7 @@ anyio==3.7.1
 certifi==2023.11.17
 charset-normalizer==3.3.2
 contourpy==1.2.0
+coverage==7.3.2
 cycler==0.12.1
 exceptiongroup==1.2.0
 fastapi==0.105.0
