@@ -1,0 +1,20 @@
+groups:
+- name: alert.rules
+  rules:
+  - alert: HostOutOfMemory
+    expr: node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes*100 < 5
+    for: 5m
+    labels:
+      severity: warning
+    annotations:
+      summary: "Host out of memory!"
+      description: "Node memory is filling up (< 5% left)"
+      
+  - alert: HighCPUTimeConsumption
+    expr: rate(node_cpu_seconds_total{mode="system"}[1m]) > 0.02
+    for: 30s
+    labels:
+      severity: warning
+    annotations:
+      summary: "High CPU Time consumption!"
+      description: "Node CPU Time is high!"

@@ -1,0 +1,28 @@
+version: '3.3'
+
+services:
+  grafana:
+    build: 
+      context: ./src/app/grafana/
+      dockerfile: dockerfile_graf
+    ports:
+      - '3000:3000'
+      
+  prometheus:
+    build: 
+      context: ./src/app/prom/
+      dockerfile: dockerfile_prom
+    ports:
+      - '9090:9090'
+      
+  web:
+    image: mlopswhereiswally/web:latest
+    ports:
+      - "8000:8000"
+    depends_on:
+      - api
+      
+  api:
+    image: mlopswhereiswally/app:latest
+    ports:
+      - "5000:5000"

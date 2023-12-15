@@ -1,0 +1,4 @@
+
+[TYPECHECK]
+ignored-modules=numpy,torch,cv2,src
+ignored-classes=numpy,torch,cv2
