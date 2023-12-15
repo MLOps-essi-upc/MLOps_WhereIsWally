@@ -1,3 +1,4 @@
+"""Module for testing the api"""
 # pylint: disable=redefined-outer-name
 import os
 from http import HTTPStatus
@@ -10,10 +11,12 @@ from src.app.backend.api import app
 
 @pytest.fixture(scope="module", autouse=True)
 def client():
+    """Function to get the client"""
     with TestClient(app) as client:
         return client
 
 def test_get_main(client):
+    """Function to test a get to the main page"""
     response = client.get("/")
     assert response.status_code == HTTPStatus.OK.value
     response_body = response.json()
@@ -23,7 +26,9 @@ def test_get_main(client):
     assert response_body["message"] == HTTPStatus.OK.phrase
     assert response_body["data"]["message"] == "Welcome to Where is Wally!"
 
+
 def test_predict_with_invalid_file(client):
+    """Function to test a prediction with an invalid file"""
     current_dir = os.path.dirname(os.path.abspath(__file__))
     file_path = os.path.join(current_dir, 'testing_file.txt')
     with open(file_path, 'rb') as file:
@@ -31,7 +36,9 @@ def test_predict_with_invalid_file(client):
     assert response.status_code == 400
     assert "Invalid image file" in response.text
 
+
 def test_predict_with_valid_image_wally_found_model_all(client):
+    """Function to test a prediction with a valid image using the model that finds all characters"""
     current_dir = os.path.dirname(os.path.abspath(__file__))
     file_path = os.path.join(current_dir, 'testing_img.png')
     with open(file_path, 'rb') as file:
@@ -43,7 +50,9 @@ def test_predict_with_valid_image_wally_found_model_all(client):
     assert 'orig_shape' in response_body['boxes']
     assert len(response_body['boxes']['orig_shape']) > 0
 
+
 def test_predict_with_valid_image_wally_not_found(client):
+    """Function to test a prediction with a valid image that does not find wally"""
     current_dir = os.path.dirname(os.path.abspath(__file__))
     file_path = os.path.join(current_dir, 'testing_not_found_img.jpeg')
     with open(file_path, 'rb') as file:
@@ -56,7 +65,9 @@ def test_predict_with_valid_image_wally_not_found(client):
     assert "Processing completed, but Wally was not found in the image." in response.text
     assert len(response_body['boxes']) == 0
 
+
 def test_predict_with_valid_image_model_wally(client):
+    """Function to test a prediction with a valid image using the model that only finds wally"""
     current_dir = os.path.dirname(os.path.abspath(__file__))
     file_path = os.path.join(current_dir, 'testing_img.png')
     with open(file_path, 'rb') as file:

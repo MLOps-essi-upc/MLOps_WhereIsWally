@@ -3,7 +3,6 @@ WORKDIR /app
 COPY src/ ./src/
 COPY models/ ./models/
 RUN useradd -rs /bin/false node_exporter
-ADD src/app/backend/node_exporter.service  /etc/systemd/system/node_exporter.service
 RUN pip install --no-cache-dir -r src/app/backend/requirements_api.txt
 RUN apt-get update && apt-get install ffmpeg libsm6 libxext6  -y
 EXPOSE 5000

@@ -5,3 +5,7 @@
 .idea
 .DS_Store
 __pycache__
+/node_exporter-1.7.0.linux-amd64
+/venv
+.save
+.pyc

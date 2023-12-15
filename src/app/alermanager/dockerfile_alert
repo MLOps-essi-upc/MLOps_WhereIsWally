@@ -1,0 +1,2 @@
+FROM prom/alertmanager:v0.23.0
+ADD ./alertmanager.yml /config/alertmanager.yml
