@@ -17,6 +17,7 @@ from ultralytics import YOLO
 import os
 import asyncio
 from prometheus_fastapi_instrumentator import Instrumentator, metrics
+#from src.app.alibi_detect.predict_drift_detector import predict
 
 model_wrappers_list: List[dict] = []
 
@@ -159,6 +160,7 @@ async def _predict(type: str, file: UploadFile = File(...)):
                 status_code=HTTPStatus.BAD_REQUEST, detail="Invalid image file"
             )
         else:
+            #predict(img)
             results = model.predict(source=img, conf=0.25)
             boxes = results[0].boxes.xyxy
             conf = results[0].boxes.conf

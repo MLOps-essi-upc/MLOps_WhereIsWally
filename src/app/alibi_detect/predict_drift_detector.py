@@ -1,11 +1,11 @@
 import numpy as np
 from os import listdir
 from os.path import isfile, join
-from src import RAW_DATA_DIR,DRIFT_DETECTOR_DIR
+from src import RAW_DATA_DIR,LOAD_DRIFT_DETECTOR_DIR
 from alibi_detect.saving import load_detector
 import datetime
 
-model=load_detector(DRIFT_DETECTOR_DIR)
+model=load_detector(LOAD_DRIFT_DETECTOR_DIR)
 
 def predict(img):
     image=np.asarray(img).astype('float32') / 255.

@@ -20,7 +20,7 @@ def img_to_np(path, resize = True):
     images = np.array(img_array)
     return images
 
-path_train = RAW_DATA_DIR / "valid/images"
+path_train = RAW_DATA_DIR / "train/images"
 
 train = img_to_np(path_train)
 train = train.astype('float32') / 255.
